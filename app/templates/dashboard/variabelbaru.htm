@@ -1,0 +1,65 @@
+{% extends "dashboard/base.htm" %} {% block content %}
+<div class="right_col" role="main">
+    <!-- <h2>Kategori</h2> -->
+
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <!-- <h2>Kategori</h2> -->
+                <div class="x_title">
+                    <h2>Buat Model
+                        <!-- <small>Variabel Baru</small> -->
+                    </h2>
+                    <div class="clearfix"></div>
+                </div>
+                <!--<div class="row">
+                <a href="{{ url_for('variabelbaru') }}" class="btn btn-default btn-info pull-right">Kategori Baru</a>
+                </div>
+                <hr class="soft" />-->
+                <form class="form-horizontal" action="" method="POST" name="variabel">
+                    <fieldset>
+                        {{ form.hidden_tag() }}
+                        <div>
+                            <p>{{ form.n_variabel.label }} {{ form.n_variabel(class_='form-control',size=32,pattern='[a-z]{1,32}') }}<br>
+                                <p>{{ form.r_variabel.label }} {{ form.r_variabel(class_='form-control',size=128) }}<br>
+                                </p>
+                                <strong>Deskripsi</strong>
+                                <p>
+                                    <div><input type="text" name="deskripsi" id="summernote" value=""></div>
+                                </p>
+                                <hr class="soft" />
+                                <p><input id="smb" type="submit" class="btn btn-info" value="Buat Baru"></p>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<link href="{{ url_for('static', filename='vendors/summernote/summernote.css') }}" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="{{ url_for('static', filename='vendors/summernote/summernote.js') }}"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#n_variabel').on('keypress', function(e) {
+            if (e.which == 32) {
+                return false;
+            }
+            if (e.which > 48 && e.which < 57) {
+                return false;
+            }
+        });
+        $('#n_variabel').on('keyup', function(e) {
+            $('#n_variabel').val($('#n_variabel').val().toLowerCase());
+        });
+    });
+
+
+    $("#summernote").summernote();
+    $('#smb').click(function() {
+        $("#summernote").val($("#summernote").summernote('code'));
+    })
+</script>
+
+{% endblock %}

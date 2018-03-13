@@ -1,0 +1,84 @@
+{% extends "dashboard/base.htm" %} {% block content %}
+<!-- page content -->
+<div class="right_col" role="main">
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>LOGIN</h3>
+            </div>
+
+            <div class="title_right">
+
+            </div>
+        </div>
+
+        <!-- <div class="clearfix"></div> -->
+
+        <div class="row">
+
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <!-- <div class="x_title"> -->
+
+                    <!-- <div class="clearfix"></div> -->
+                    <!-- </div> -->
+                    <form method="POST" action="/login">
+                        {{ form.hidden_tag() }} {{ form.username.label }} {{ form.username(class_='form-control',size=32,placeholder="Masukkan Kode PUM atau Kode BPS") }} {{ form.password.label }} {{ form.password(class_='form-control',size=32,type='password') }}
+                        <p></p><input class="btn btn-info" type="submit" value="LOGIN">
+                    </form>
+                    {% with messages = get_flashed_messages() %} {% if messages %}
+                    <div class="alert alert-dismissible alert-danger">
+                        <button type="button" class="close" data-dismiss="alert">&times;</button> {% for message in messages %}
+                        <p>{{ message }}</p>
+                        {% endfor %}
+                    </div>
+                    {% endif %} {% endwith %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<!-- /page content -->
+{% endblock %}
+
+<!-- <html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>SISTEM INFORMASI GEOSPASIAL DESA</title>
+
+    <link href="app/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="app/css/signin.css" rel="stylesheet">
+
+</head>
+
+<body class="buffer-pinterest">
+
+    <div class="container">
+
+        <form class="form-signin" method="POST" action="authenticate">
+            <h1><span class="fa fa-globe"></span></h1>
+            <h2 class="form-signin-heading">Harap Log In</h2>
+            <label for="inputEmail" class="sr-only">Username</label>
+            <input type="text" id="inputEmail" name="username" class="form-control" placeholder="Username" required="" autofocus="">
+            <label for="inputPassword" class="sr-only">Password</label>
+            <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password" required="">
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Log in</button>
+        </form>
+
+    </div>
+
+</body>
+
+</html> -->

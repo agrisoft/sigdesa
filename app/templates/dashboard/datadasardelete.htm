@@ -1,0 +1,37 @@
+{% extends "dashboard/base.htm" %} {% block content %}
+<div class="right_col" role="main">
+    <div class="title_left">
+        <h3>HAPUS DATA DASAR</h3>
+    </div>
+    <hr class="soft" />
+    <div class="col-md-12">
+        <!-- <h2>Kategori</h2> -->
+
+        <div class="row">
+            <div class="well col-md-12">
+                <h2>Hapus Data Dasar {{ datadasar.r_datadasar }}?</h2>
+                <hr class="soft" />
+                <!-- <p>Kategori ini memiliki sub-kategori:
+                {%- for item in allkategori %}
+                    {%- for sb in subkategori %}
+                    <ul>
+                        {% if sb.kategori == item.id %}
+                            <li>{{ sb.sub_kategori }}</li>
+                        {% endif %}
+                    </ul>
+                    {%- endfor %}
+                {%- endfor %}
+                <hr class="soft" /> -->
+                <!--<div class="row">
+                    <a href="{{ url_for('variabelbaru') }}" class="btn btn-default btn-info pull-right">Kategori Baru</a>
+                </div>
+                <hr class="soft" />-->
+                <form action="" method="POST" name="variabel">
+                    <p><input type="submit" class="btn btn-info" value="Hapus"></p>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}

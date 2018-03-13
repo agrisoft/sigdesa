@@ -1,0 +1,70 @@
+{% extends "dashboard/base.htm" %} {% block content %}
+<div class="right_col" role="main">
+    <!-- <div class="title_left">
+
+    </div> -->
+    <hr class="soft" />
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>DAFTAR DATA DASAR</h2>
+                    <div class="clearfix"></div>
+                </div>
+
+                {{pagination.info}} {{pagination.links}}
+                <div class="clearfix"></div>
+                <div class="nav-table" style="margin-top: 1%;">
+                    <div class="title_left">
+                        <div class="col-md-2 col-sm-2 col-xs-12" style="padding:0;">
+                            <a href="{{ url_for('datadasarbaru') }}" style="margin-right:25px;">
+                                <button class="btn btn-success btn-sm" style="width:100%;"><i class="fa fa-plus" style="padding-right: 5%;"></i>Data Dasar Baru</button>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="title_right">
+                        <div class="col-md-4 col-sm-4 col-xs-12 form-group pull-right top_search" style="margin:0;">
+                            <form class="navbar-search" method="get" action="{{ url_for('datadasar')}}">
+                                <div class="input-group">
+                                    <input name="cari" id="srchFld" class="form-control" type="text" />
+                                    <div class="input-group-btn">
+                                        <button type="submit" id="submitButton" class="btn btn-default">Cari</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <table class="col-md-12 col-sm-12 col-sx-12 table-responsive table table-striped jambo_table bulk_action">
+                    <thead>
+                        <tr>
+                            <th>Nama Data Dasar</th>
+                            <th>Keterangan</th>
+                            <th style="width:170px;">Detail </th>
+                        </tr>
+                    </thead>
+                    <tr>
+                        <!-- <th>#</th> -->
+                        {%- for item in datadasar %}
+                        <tr>
+                            <td>{{ item.n_datadasar }}</td>
+                            <td>{{ item.r_datadasar }}</td>
+                            <!-- <td>{{ item.kabupaten }} </td> -->
+                            <td>
+                                <div class="btn-group btn-group-justified">
+                                    <a href="{{ url_for('datadasardetail')}}?n_datadasar={{item.n_datadasar}}" class="btn btn-info" role="button"><span class="glyphicon glyphicon-list"></span></a>{% if item.n_datadasar != 'penduduk_all' %}
+                                    <a href="{{ url_for('datadasaredit')}}?n_datadasar={{item.n_datadasar}}" class="btn btn-warning"><span class="glyphicon glyphicon-edit"></span></a>
+                                    <a href="{{ url_for('dddelete') }}?tabel={{item.n_datadasar}}" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></a> {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                        {%- endfor %}
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    {{pagination.links}}
+</div>
+{% endblock %}

@@ -1,0 +1,250 @@
+{% extends "dashboard/base.htm" %} {% block content %}
+<div class="right_col" role="main">
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <!-- <h2>Kategori</h2> -->
+                <div class="x_title">
+                    <h2>KLASIFIKASI</h2>
+                    <div class="clearfix"></div>
+                </div>
+
+                <div class="col-md-2 col-sm-2 col-xs-12 pull-right">
+                    <a id="simpanparam" href="#" class="btn btn-success pull-right" style="width:100%;"><span class="glyphicon glyphicon-save-file"></span> Simpan</a>
+                </div>
+                <br><br>
+
+                <hr class="soft" />
+                <!-- <form class="form-inline navbar-search" method="get" action="/variabel">
+                    <div class="input-group">
+                        <input name="cari" id="srchFld" class="form-control" type="text" />
+                        <div class="input-group-btn">
+                            <button type="submit" id="submitButton" class="btn btn-default">Cari</button>
+                        </div>
+                    </div>
+                </form> -->
+                <div class="x_content">
+                    <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+                        <div class="form-group">
+                            <label for="p_variabel" class="control-label col-md-2 col-sm-3 col-xs-12">Model</label>
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                <select id="p_variabel" name="p_variabel" class="form-control">
+                                        <option>Pilih Model</option>
+                                    {%- for item in variabel %}
+                                    <option value="{{item.n_variabel}}">{{item.r_variabel}}</option>
+                                    {%- endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-md-2 col-sm-3 col-xs-12">Jumlah Kelas</label>
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                <input id="breakvalue" type="text" class="form-control" value="" disabled>
+                            </div>
+                            <div class="col-md-3 col-sm-3 col-xs-3">
+                                <span class="input-group-btn">
+                                <div class="btn-group" role="group">
+                                    <button id="plusbreak" class="btn btn-default" type="button"> + </button>
+                                    <button id="minbreak" class="btn btn-default" type="button"> - </button>
+                                </div>
+                                </span>
+                            </div>
+                        </div>
+                    </form>
+                    <hr class="soft" />
+                    <div id="isivariabel" class="row">
+                        <form id="n_v_break">
+                            <div id="v_break"></div>
+                            <ul id="olisivariabel">
+                            </ul>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function setTextColor(picker) {
+        document.getElementsByTagName('body')[0].style.color = '#' + picker.toString()
+    }
+
+    $(document).ready(function() {
+
+    })
+
+    $("#plusbreak").click(function() {
+        lilength = Number($("#breakvalue").val());
+        if ($("#breakvalue").val() == '') {
+            $("#breakvalue").val(1);
+            $("#isivariabel ul").append("<li>Kelas " + String(lilength + 1) + ": <input class='form-control' id='rem_" + String(lilength + 1) + "' type='text' value='Klasifikasi " + String(lilength + 1) + "' name='rem_" + String(lilength + 1) + "'>Nilai: <input type='number' class='form-control' id='break_" + String(lilength + 1) + "' value='" + String(lilength + 1) + "' name='break_" + String(lilength + 1) + "'><input id='spec_" + String(lilength + 1) + "' value='" + String('#acbacb') + "' name='spec_" + String(lilength + 1) + "'></li>");
+            $("#spec_" + String(lilength + 1)).spectrum({
+                preferredFormat: "hex",
+                showInput: true
+            });
+        } else {
+            $("#breakvalue").val(Number($("#breakvalue").val()) + 1);
+            $("#isivariabel ul").append("<li>Kelas " + String(lilength + 1) + ": <input class='form-control' id='rem_" + String(lilength + 1) + "' type='text' value='Klasifikasi " + String(lilength + 1) + "' name='rem_" + String(lilength + 1) + "'>Nilai: <input type='number' class='form-control' id='break_" + String(lilength + 1) + "' value='" + String(lilength + 1) + "' name='break_" + String(lilength + 1) + "'><input id='spec_" + String(lilength + 1) + "' value='" + String('#acbacb') + "' name='spec_" + String(lilength + 1) + "'></li>");
+            $("#spec_" + String(lilength + 1)).spectrum({
+                preferredFormat: "hex",
+                showInput: true
+            });
+        }
+    })
+
+    $("#minbreak").click(function() {
+        if ($("#breakvalue").val() == '' || $("#breakvalue").val() == '1') {
+            $("#breakvalue").val(1);
+            $("#olisivariabel li").eq(Number($("#breakvalue").val())).remove();
+        } else {
+            $("#breakvalue").val(Number($("#breakvalue").val()) - 1);
+            $("#olisivariabel li").eq(Number($("#breakvalue").val())).remove();
+        }
+    })
+
+    $("#p_variabel").change(function() {
+        $('#olisivariabel').empty();
+        $('#v_break').empty();
+        selection = $("#p_variabel").val();
+        $.get("/kategoridesc", {
+            variabel: String(selection)
+        }, function(data) {
+            window.kategoridesc = data;
+        });
+        $.get("/variabel/detail/" + String(selection),
+            function(data) {
+                tipe = data['tipe'];
+                window.variabeldesc = data;
+                d_break = kategoridesc[0];
+                v_break = String(d_break.v_break).split(',');
+                v_color = String(d_break.v_color).split(',');
+                console.log(v_break);
+                total_nilai = 0
+                for (i = 0; i < v_break.length; i++) {
+                    total_nilai = total_nilai + Number(v_break[i]);
+                }
+                if (tipe == 1) {
+                    // console.log(kategoridesc[0])
+                    $("#v_break").append('Jumlah total nilai: ', String(kategoridesc[0].v_break).split(',')[String(kategoridesc[0].v_break).split(',').length - 1]);
+                    $("#breakvalue").val(kategoridesc[0].n_break);
+                    for (i = 0; i < kategoridesc[0].n_break; i++) {
+                        try {
+                            $("#isivariabel ul").append("<li>Kelas " + String(i + 1) + ": <input class='form-control' id='rem_" + String(i + 1) + "' type='text' value='" + kategoridesc[0].r_break.split(',')[i] + "' name='rem_" + String(i + 1) + "'>Nilai: <input class='form-control' id='break_" + String(i + 1) + "' type='number' value='" + kategoridesc[0].v_break.split(',')[i] + "' name='break_" + String(i + 1) + "'><input id='spec_" + String(i + 1) + "'  value='" + kategoridesc[0].v_color.split(',')[i] + "' name='spec_" + String(i + 1) + "'></li>");
+                        } catch (err) {
+                            $("#isivariabel ul").append("<li>Kelas " + String(i + 1) + ": <input class='form-control' id='rem_" + String(i + 1) + "' type='text' value='Klasifikasi " + String(i + 1) + "' name='rem_" + String(i + 1) + "'>Nilai: <input class='form-control' id='break_" + String(i + 1) + "' type='number' value='" + '' + "' name='break_" + String(i + 1) + "'><input id='spec_" + String(i + 1) + "'  value='" + '' + "' name='spec_" + String(i + 1) + "'></li>");
+                        }
+                        $("#spec_" + String(i + 1)).spectrum({
+                            preferredFormat: "hex",
+                            showInput: true
+                        });
+                    }
+                };
+                if (tipe == 2) {
+                    // $("#v_break").append('Jumlah total nilai: ', total_nilai);
+                    $("#breakvalue").val(kategoridesc[0].n_break);
+                    for (i = 0; i < kategoridesc[0].n_break; i++) {
+                        try {
+                            $("#isivariabel ul").append("<li>Kelas " + String(i + 1) + ": <input class='form-control' id='rem_" + String(i + 1) + "' type='text' value='" + kategoridesc[0].r_break.split(',')[i] + "' name='rem_" + String(i + 1) + "'>Nilai: <input class='form-control' id='break_" + String(i + 1) + "' type='number' value='" + kategoridesc[0].v_break.split(',')[i] + "' name='break_" + String(i + 1) + "'><input id='spec_" + String(i + 1) + "'  value='" + kategoridesc[0].v_color.split(',')[i] + "' name='spec_" + String(i + 1) + "'></li>");
+                            $("#spec_" + String(i + 1)).spectrum({
+                                preferredFormat: "hex",
+                                showInput: true
+                            });
+                        } catch (err) {
+                            $("#isivariabel ul").append("<li>Kelas " + String(i + 1) + ": <input class='form-control' id='rem_" + String(i + 1) + "' type='text' value='Klasifikasi " + String(i + 1) + "' name='rem_" + String(i + 1) + "'>Nilai: <input class='form-control' id='break_" + String(i + 1) + "' type='number' value='" + kategoridesc[0].v_break[i] + "' name='break_" + String(i + 1) + "'><input id='spec_" + String(i + 1) + "'  value='" + kategoridesc[0].v_color[i] + "' name='spec_" + String(i + 1) + "'></li>");
+                            $("#spec_" + String(i + 1)).spectrum({
+                                preferredFormat: "hex",
+                                showInput: true
+                            });
+                        }
+                    }
+                };
+                if (tipe == 3) {
+                    $("#v_break").append('Jumlah nilai: Tergantung formula');
+                    $("#breakvalue").val(kategoridesc[0].n_break);
+                    for (i = 0; i < kategoridesc[0].n_break; i++) {
+                        try {
+                            $("#isivariabel ul").append("<li>Kelas " + String(i + 1) + ": <input class='form-control' id='rem_" + String(i + 1) + "' type='text' value='" + kategoridesc[0].r_break.split(',')[i] + "' name='rem_" + String(i + 1) + "'>Nilai: <input class='form-control' id='break_" + String(i + 1) + "'  type='number' value='" + kategoridesc[0].v_break.split(',')[i] + "' name='break_" + String(i + 1) + "'><input id='spec_" + String(i + 1) + "'  value='" + kategoridesc[0].v_color.split(',')[i] + "' name='spec_" + String(i + 1) + "'></li>");
+                            $("#spec_" + String(i + 1)).spectrum({
+                                preferredFormat: "hex",
+                                showInput: true
+                            });
+                        } catch (err) {
+                            $("#isivariabel ul").append("<li>Kelas " + String(i + 1) + ": <input class='form-control' id='rem_" + String(i + 1) + "' type='text' value='Klasifikasi " + String(i + 1) + "' name='rem_" + String(i + 1) + "'>Nilai: <input class='form-control' id='break_" + String(i + 1) + "'  type='number' value='" + kategoridesc[0].v_break[i] + "' name='break_" + String(i + 1) + "'><input id='spec_" + String(i + 1) + "'  value='" + kategoridesc[0].v_color[i] + "' name='spec_" + String(i + 1) + "'></li>");
+                            $("#spec_" + String(i + 1)).spectrum({
+                                preferredFormat: "hex",
+                                showInput: true
+                            });
+                        }
+                    }
+                }
+                if (tipe == 4) {
+                    // $("#v_break").append('Jumlah total nilai: ', total_nilai);
+                    $("#breakvalue").val(kategoridesc[0].n_break);
+                    for (i = 0; i < kategoridesc[0].n_break; i++) {
+                        try {
+                            $("#isivariabel ul").append("<li>Kelas " + String(i + 1) + ": <input class='form-control' id='rem_" + String(i + 1) + "' type='text' value='" + kategoridesc[0].r_break.split(',')[i] + "' name='rem_" + String(i + 1) + "'>Nilai: <input class='form-control' id='break_" + String(i + 1) + "' type='number' value='" + kategoridesc[0].v_break.split(',')[i] + "' name='break_" + String(i + 1) + "'><input id='spec_" + String(i + 1) + "'  value='" + kategoridesc[0].v_color.split(',')[i] + "' name='spec_" + String(i + 1) + "'></li>");
+                            $("#spec_" + String(i + 1)).spectrum({
+                                preferredFormat: "hex",
+                                showInput: true
+                            });
+                        } catch (err) {
+                            $("#isivariabel ul").append("<li>Kelas " + String(i + 1) + ": <input class='form-control' id='rem_" + String(i + 1) + "' type='text' value='Klasifikasi " + String(i + 1) + "' name='rem_" + String(i + 1) + "'>Nilai: <input class='form-control' id='break_" + String(i + 1) + "' type='number' value='" + kategoridesc[0].v_break[i] + "' name='break_" + String(i + 1) + "'><input id='spec_" + String(i + 1) + "'  value='" + kategoridesc[0].v_color[i] + "' name='spec_" + String(i + 1) + "'></li>");
+                            $("#spec_" + String(i + 1)).spectrum({
+                                preferredFormat: "hex",
+                                showInput: true
+                            });
+                        }
+                    }
+                }
+                if (tipe == 5) {
+                    // $("#v_break").append('Jumlah total nilai: ', total_nilai);
+                    $("#breakvalue").val(kategoridesc[0].n_break);
+                    for (i = 0; i < kategoridesc[0].n_break; i++) {
+                        try {
+                            $("#isivariabel ul").append("<li>Kelas " + String(i + 1) + ": <input class='form-control' id='rem_" + String(i + 1) + "' type='text' value='" + kategoridesc[0].r_break.split(',')[i] + "' name='rem_" + String(i + 1) + "'>Nilai: <input class='form-control' id='break_" + String(i + 1) + "' type='number' value='" + kategoridesc[0].v_break.split(',')[i] + "' name='break_" + String(i + 1) + "'><input id='spec_" + String(i + 1) + "'  value='" + kategoridesc[0].v_color.split(',')[i] + "' name='spec_" + String(i + 1) + "'></li>");
+                            $("#spec_" + String(i + 1)).spectrum({
+                                preferredFormat: "hex",
+                                showInput: true
+                            });
+                        } catch (err) {
+                            $("#isivariabel ul").append("<li>Kelas " + String(i + 1) + ": <input class='form-control' id='rem_" + String(i + 1) + "' type='text' value='Klasifikasi " + String(i + 1) + "' name='rem_" + String(i + 1) + "'>Nilai: <input class='form-control' id='break_" + String(i + 1) + "' type='number' value='" + kategoridesc[0].v_break[i] + "' name='break_" + String(i + 1) + "'><input id='spec_" + String(i + 1) + "'  value='" + kategoridesc[0].v_color[i] + "' name='spec_" + String(i + 1) + "'></li>");
+                            $("#spec_" + String(i + 1)).spectrum({
+                                preferredFormat: "hex",
+                                showInput: true
+                            });
+                        }
+                    }
+                };;
+            });
+    })
+
+    $("#simpanparam").click(function() {
+        formser = $("#n_v_break").serialize();
+        tabel = $("#p_variabel").val();
+        console.log('SAVE', tabel);
+        console.log(formser);
+        $.ajax({
+            url: "{{ url_for('simpanbreak')}}?tabel=" + tabel,
+            data: formser,
+            type: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            success: function(response) {
+                console.log(response);
+                $.bootstrapGrowl("Tersimpan", {
+                    type: 'success'
+                });
+            },
+            error: function(error) {
+                console.log(error);
+                $.bootstrapGrowl("Tersimpan", {
+                    type: 'success'
+                });
+            }
+        });
+    })
+</script>
+
+{% endblock %}

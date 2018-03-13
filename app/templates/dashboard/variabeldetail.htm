@@ -1,0 +1,657 @@
+{% extends "dashboard/base.htm" %} {% block content %}
+
+<div class="right_col" role="main">
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>Detail: {{variabel.r_variabel}}
+                        <!-- <small>Variabel {{variabel.r_variabel}}</small> -->
+                    </h2>
+                    <p id="idvariabel" style="display:none">{{variabel.n_variabel}}</p>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <div class="form-group">
+                        <label for="select" class="col-lg-1 control-label">Tipe</label>
+                        <div class="col-lg-4">
+                            <select class="form-control" id="tipeselect">
+                                <option value="1">Model Skoring 1</option>
+                                <option value="5">Model Skoring 2</option>
+                                <option value="2">Nilai Terendah</option>
+                                <option value="3">Formula</option>
+                                <option value="4">Profile</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-7">
+                            <a id="simpanparam" href="#" class="btn btn-success pull-right"><span class="glyphicon glyphicon-save-file"></span> Simpan</a>
+                            <a id="tambahparam" href="#" class="btn btn-info pull-right"><span class="glyphicon glyphicon-plus"></span> Parameter Baru</a>
+                        </div>
+                    </div>
+                    <div class="row" style="border-top: 2px solid #E6E9ED;  height: auto;  margin-top: 50px;">
+                        <form id="param_skoring">
+                            <div class="col" id="skoring">
+                                <h2 class="x_title" style="border-bottom:0;">Parameter Model Skoring 1</h2>
+                                <ol id="ol_skoring"> </ol>
+                            </div>
+                        </form>
+                        <form id="param_lowestskoring">
+                            <div class="col" id="lowestskoring" style="display: none;">
+                                <h2 class="x_title" style="border-bottom:0;">Parameter Nilai Terendah</h2>
+                                <div class="form-group" class="form-horizontal form-label-left">
+                                    <label class="control-label col-md-2 col-sm-3 col-xs-12">Jumlah Pilihan</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-9">
+                                        <input id="jumlahpilihan" type="text" class="form-control" value="1" disabled>
+                                    </div>
+                                    <div class="col-md-1 col-sm-9 col-xs-3">
+                                        <div class="input-group">
+                                            <span class="btn-group">
+                                                <button id="plusbreak" class="btn btn-default" type="button"> + </button>
+                                                <button id="minbreak" class="btn btn-default" type="button"> - </button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <ol id="pertanyaan">
+                                </ol>
+                            </div>
+                        </form>
+                        <form id="param_skoringcust">
+                            <div class="col" id="skoringcust">
+                                <h2 class="x_title" style="border-bottom:0;">Parameter Model Skoring 2</h2>
+                                <div class="form-group" class="form-horizontal form-label-left">
+                                    <label class="control-label col-md-2 col-sm-3 col-xs-12">Jumlah Kategori</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-9">
+                                        <input id="jumlahkat_cust" type="text" class="form-control" value="1" disabled>
+                                    </div>
+                                    <div class="col-md-1 col-sm-9 col-xs-3">
+                                        <div class="input-group">
+                                            <span class="btn-group">
+                                                <button id="pluskat_cust" class="btn btn-default" type="button"> + </button>
+                                                <button id="minkat_cust" class="btn btn-default" type="button"> - </button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <label class="control-label col-md-2 col-sm-3 col-xs-12">Jumlah Pilihan</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-9">
+                                        <input id="jumlahpilihan_cust" type="text" class="form-control" value="1" disabled>
+                                    </div>
+                                    <div class="col-md-1 col-sm-9 col-xs-3">
+                                        <div class="input-group">
+                                            <span class="btn-group">
+                                                <button id="plusbreak_cust" class="btn btn-default" type="button"> + </button>
+                                                <button id="minbreak_cust" class="btn btn-default" type="button"> - </button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5"></div>
+                                    <div class="input-group col-md-2" style="padding-top:10px;padding-bottom:10px;">
+                                        <!-- <a id="simpanparam" href="#" class="btn btn-success pull-right"><span class="glyphicon glyphicon-save-file"></span> Simpan</a> -->
+                                        <a id="tambahparam_cust" href="#" class="col-md-12 btn btn-info pull-right"><span class="glyphicon glyphicon-plus"></span> Buat Baru</a>
+                                    </div>
+                                </div>
+                                <div class="underlined">
+                                    <ol id="ol_skoringcust" class="list-group"></ol>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="col" id="formula">
+                            <h2 class="x_title" style="border-bottom:0;">Parameter Formula</h2>
+                            <div class="form-group">
+                                <label for="p_tahun" class="col-lg-2 control-label">Tahun</label>
+                                <div class="col-lg-10">
+                                    <select id="p_tahun" name="p_desa" class="form-control">
+                                    <option value="">2013</option>
+                                    <option value="">2014</option>
+                                    <option value="">2015</option>
+                                    <option value="">2016</option>
+                                    <option value="" selected>2017</option>
+                                    <option value="">2018</option>
+                                </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="listvariabel" class="col-lg-2 control-label">Daftar Data</label>
+                                <div class="col-lg-10" id="listvariabel">
+                                </div>
+                            </div>
+                            <div id="subdatadasar" class="col form-group">
+                                <label id="l_listsubvariabel" for="listsubvariabel" class="col-lg-2 control-label">Daftar Variabel Data</label>
+                                <div class="col-lg-10" id="listsubvariabel">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="operand" class="col-lg-2 control-label">Operand</label>
+                                <div id="operand" class="btn-group col-lg-10">
+                                    <a id="tambah" href="#" class="btn btn-default"> + </a>
+                                    <a id="kurang" href="#" class="btn btn-default"> - </a>
+                                    <a id="kali" href="#" class="btn btn-default"> * </a>
+                                    <a id="bagi" href="#" class="btn btn-default"> / </a>
+                                    <a id="pangkat" href="#" class="btn btn-default"> ^ </a>
+                                    <a id="kurbu" href="#" class="btn btn-default"> ( </a>
+                                    <a id="kurtup" href="#" class="btn btn-default"> ) </a>
+                                </div>
+                                <br>
+                            </div>
+                            <div class="form-group">
+                                <label for="formulaentry" class="col-lg-2 control-label">Formula</label>
+                                <div class="col-lg-10">
+                                    <textarea class="form-control" rows="3" id="formulaentry"></textarea>
+                                    <span class="help-block">Dummy.</span>
+                                </div>
+                                <!-- <label for="formulapre" class="col-lg-2 control-label">Formula/Pre</label>
+                                <div class="col-lg-10">
+                                    <textarea class="form-control" rows="3" id="formulapre" disabled></textarea>
+                                    <span class="help-block">Dummy.</span>
+                                </div> -->
+                            </div>
+                            <ol>
+                            </ol>
+                        </div>
+                        <div id="profile" class="col">
+                            <!-- <textarea></textarea> -->
+                            <div class="col-lg-10">
+                                <span class="help-block">Profile.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="clear:both"></div>
+</div>
+</div>
+<div id="userclass" style="display:none">{{session['kelas']}}</div>
+<div id="username" style="display:none">{{session['username']}}</div>
+
+<script src="{{ url_for('static', filename='vendors/form2js/form2js.js') }}"></script>
+<script src="{{ url_for('static', filename='vendors/form2js/js2form.js') }}"></script>
+<script src="{{ url_for('static', filename='vendors/form2js/jquery.toObject.js') }}"></script>
+
+<script>
+    function search_tipe(array, key) {
+        $.each(array, function(i, val) {
+            // console.log(i, val);
+            if (String(i) === String(key)) {
+                console.log(val)
+                return val
+            }
+            return 999
+        })
+    }
+
+    var datadasar, variabel;
+
+    var vartabel, usedtabel = [],
+        usedtabelflt = [];
+
+    $(document).ready(function() {
+        // $(function() {
+        //     $('textarea').froalaEditor()
+        // });
+        console.log("ready!");
+        $("#skoring").show();
+        $("#param_skoringcust").hide();
+        $("#lowestskoring").hide();
+        $("#formula").hide();
+        $("#profile").hide();
+        $("#listsubvariabel").hide();
+        $("#l_listsubvariabel").hide();
+        $.get("{{ url_for('variabeldetailload', id=variabel.n_variabel)}}",
+            function(data) {
+                window.variabel = data;
+                // console.log(data);
+            });
+        $.get("{{ url_for('datadasarget')}}",
+            function(data) {
+                window.datadasar = data;
+                $.each(data, function(i, val) {
+                        $("#listvariabel").append("<a href='#'' class='list-group-item' id='" + String(i) + "'>" + String(val) + "</a>")
+                    })
+                    // console.log(data);
+            });
+        setTimeout(function() {
+            tipe = 999
+                // tipe = search_tipe(variabel, 'tipe');
+            tipe = variabel['tipe'];
+            console.log(tipe);
+            if (tipe == '1') {
+                $("#skoring").show();
+                $("#param_skoringcust").hide();
+                $("#lowestskoring").hide();
+                $("#formula").hide();
+                $("#profile").hide();
+                $("#tambahparam").show();
+                $("#tipeselect").val("1");
+                $.each(variabel, function(i, val) {
+                    if (String(i) != 'tipe') {
+                        console.log("inner: ", i, val);
+                        $("#skoring ol").append("<li><div id='varparam' class='form-group skoringli'><label class='control-label' for='" + String(i) + "'>Indikator</label><input class='form-control' id='" + String(i) + "' type='text' value='" + String(val) + "' name='" + String(i) + "'></div><a id='hapusparam' href='#' class='btn-xs btn-danger pull-left'><span class='glyphicon glyphicon-remove'></span> Hapus</a></li>");
+                    }
+                })
+            } else if (tipe == '2') {
+                $("#skoring").hide();
+                $("#param_skoringcust").hide();
+                $("#lowestskoring").show();
+                $("#formula").hide();
+                $("#profile").hide();
+                $("#tambahparam").show();
+                $("#tipeselect").val("2");
+                $.each(variabel, function(i, val) {
+                    if (String(i) != 'tipe' && String(i) == 'pertanyaan') {
+                        console.log(val)
+                        pertanyaan = JSON.parse(val);
+                        jmlpertanyaan = Object.keys(pertanyaan).length;
+                        for (i = 0; i < jmlpertanyaan; i++) {
+                            console.log(pertanyaan[i + 1])
+                            jmlsub = Object.keys(pertanyaan[i + 1]).length;
+                            $("#pertanyaan").append('<li><div id="varparam" class="form-group skoringli"><label class="control-label" for="focusedInput">Indikator</label><input class="form-control" id="pilgan_' + String(i + 1) + '" name="pilgan_' + String(i + 1) + '" type="text" value="' + pertanyaan[i + 1][1] + '"><label class="control-label" for="focusedInput">Pilihan</label><div id="pilganda_' + String(i + 1) + '"><ol type="a"></ol></div></div></li>');
+                            k = 2;
+                            console.log('SUB', jmlsub);
+                            $("#jumlahpilihan").val(jmlsub - 1);
+                            for (j = 1; j < jmlsub; j++) {
+                                console.log('JB', pertanyaan[i + 1][k])
+                                $("#pilganda_" + String(i + 1) + " ol").append("<li><input class='form-control' id='subpil_" + String(i + 1) + "' type='text' name='subpil_" + String(j) + "' value='" + pertanyaan[i + 1][k] + "'></li>");
+                                k++;
+                            }
+                            // }
+                        }
+                    }
+                })
+                console.log('2');
+            } else if (tipe == '3') {
+                $("#skoring").hide();
+                $("#param_skoringcust").hide();
+                $("#lowestskoring").hide();
+                $("#formula").show();
+                $("#profile").hide();
+                $("#tambahparam").hide();
+                $("#tipeselect").val("3")
+                $("#formulaentry").val(variabel.formula);
+                usedtabel = JSON.parse(variabel.tabel);
+                $.get("{{ url_for('datadasarget')}}",
+                    function(data) {
+                        window.datadasar = data;
+                        $.each(data, function(i, val) {
+                                $("#listvariabel").append("<a href='#'' class='list-group-item' id='" + String(i) + "'>" + String(val) + "</a>")
+                            })
+                            // console.log(data);
+                    });
+            } else if (tipe == '4') {
+                $("#skoring").hide();
+                $("#param_skoringcust").hide();
+                $("#lowestskoring").hide();
+                $("#formula").hide();
+                $("#profile").show();
+                $("#tambahparam").hide();
+                $("#tipeselect").val("4");
+            } else if (tipe == '5') {
+                $("#skoring").hide();
+                $("#param_skoringcust").show();
+                $("#lowestskoring").hide();
+                $("#formula").hide();
+                $("#profile").hide();
+                $("#tambahparam").hide();
+                $("#tipeselect").val("5");
+                console.log(variabel);
+                $.each(variabel, function(i, val) {
+                    if (String(i) != 'tipe' && String(i) == 'pertanyaan') {
+                        // console.log(val)
+                        pertanyaan = JSON.parse(val);
+                        console.log(pertanyaan)
+                        jmlkat = Object.keys(pertanyaan).length;
+                        jmlpertanyaan = Object.keys(pertanyaan[1]).length;
+                        $("#jumlahkat_cust").val(jmlkat);
+                        $("#jumlahpilihan_cust").val(jmlpertanyaan);
+                        for (i = 0; i < jmlkat; i++) {
+                            console.log(pertanyaan[i + 1]);
+                            $("#ol_skoringcust").append("<li class=''list-groups-item><div id='custkat_" + String(i + 1) + "' class='form-group paramlist1'><label class='control-label' for='custkat_" + String(i + 1) + "'>Kategori</label><div><input style='width:80%; float:left;' class='form-control' id='custkat_" + String(i + 1) + "' type='text' name='custkat_" + String(i + 1) + "' value='" + pertanyaan[i + 1]['kategori'] + "'><a id='cuskattparam' href='#' class=' btn btn-danger' style='margin-left:1%;'><span class='glyphicon glyphicon-plus'></span> Tambah Pertanyaan</a></input></div></div><ol class='paramlist1' id='subcuskat_" + String(i + 1) + "'></ol></div></li>");
+                            console.log('custkat_' + String(i + 1));
+                            jmlper = Object.keys(pertanyaan[i + 1]).length - 1;
+                            for (j = 0; j < jmlper; j++) {
+                                $("#subcuskat_" + String(i + 1)).append("<li><label class='control-label paramlist1' for='subkat_" + String(i + 1) + "_" + String(j + 1) + "'>Pertanyaan </label><input class='form-control' id='subkat_" + String(i + 1) + "_" + String(j + 1) + "' type='text' name='subkat_" + String(i + 1) + "_" + String(j + 1) + "' value='" + pertanyaan[i + 1][j + 1]['pertanyaan'] + "'><ol class='paramlist1' id='subcuskatq_" + String(i + 1) + "_" + String(j + 1) + "'></ol></li>")
+                                jmljaw = Object.keys(pertanyaan[i + 1][j + 1]).length - 1;
+                                console.log(jmljaw);
+                                for (k = 0; k < jmljaw; k++) {
+                                    console.log(pertanyaan[i + 1][j + 1][k]);
+                                    try {
+                                        valjaw = pertanyaan[i + 1][j + 1][k + 1]['jawaban'];
+                                        valsko = pertanyaan[i + 1][j + 1][k + 1]['skor'];
+                                    } catch (error) {
+                                        valjaw = '';
+                                        valsko = '';
+                                    }
+                                    $("#subcuskatq_" + String(i + 1) + "_" + String(j + 1)).append("<li><label class='control-label' for='subcuskatqq_" + String(i + 1) + "'>Jawaban </label><input class='form-control' id='subcuskatqq_" + String(i + 1) + "_" + String(j + 1) + "_" + String(k + 1) + "' type='text' name='subcuskatqq_" + String(i + 1) + "_" + String(j + 1) + "_" + String(k + 1) + "' value='" + valjaw + "'><label class='control-label' for='subcuskatqqs_" + String(i + 1) + "'>Skor </label><input class='form-control' id='subcuskatqqs_" + String(i + 1) + "_" + String(j + 1) + "_" + String(k + 1) + "' type='number'  name='subcuskatqqs_" + String(i + 1) + "_" + String(j + 1) + "_" + String(k + 1) + "' value='" + valsko + "'></li>")
+                                }
+                            }
+                        }
+                    }
+                })
+            }
+        }, 2000);
+    });
+
+    $("#tipeselect").change(function() {
+        console.log($("#tipeselect").val());
+        selection = $("#tipeselect").val();
+        if (selection == 1) {
+            $("#skoring").show();
+            $("#param_skoringcust").hide();
+            $("#lowestskoring").hide();
+            $("#formula").hide();
+            $("#profile").hide();
+            $("#tambahparam").show();
+        } else if (selection == 2) {
+            $("#skoring").hide();
+            $("#param_skoringcust").hide();
+            $("#lowestskoring").show();
+            $("#formula").hide();
+            $("#profile").hide();
+            $("#tambahparam").show();
+        } else if (selection == 3) {
+            $("#skoring").hide();
+            $("#param_skoringcust").hide();
+            $("#lowestskoring").hide();
+            $("#formula").show();
+            $("#profile").hide();
+            $("#tambahparam").hide();
+        } else if (selection == 4) {
+            $("#skoring").hide();
+            $("#param_skoringcust").hide();
+            $("#lowestskoring").hide();
+            $("#formula").hide();
+            $("#profile").show();
+            $("#tambahparam").hide();
+        } else if (selection == 5) {
+            $("#skoring").hide();
+            $("#param_skoringcust").show();
+            $("#lowestskoring").hide();
+            $("#formula").hide();
+            $("#profile").hide();
+            $("#tambahparam").hide();
+        }
+    });
+
+    $("#plusbreak").click(function() {
+        $("#jumlahpilihan").val(Number($("#jumlahpilihan").val()) + 1);
+    })
+
+    $("#minbreak").click(function() {
+        if ($("#jumlahpilihan").val() == '' || $("#jumlahpilihan").val() == '1') {
+            $("#jumlahpilihan").val(1);
+        } else {
+            $("#jumlahpilihan").val(Number($("#jumlahpilihan").val()) - 1);
+        }
+    })
+
+
+    $("#tambahparam").click(function() {
+        tabel = $("#idvariabel").text();
+        selection = $("#tipeselect").val();
+        console.log("Tambah parameter", $("#tipeselect option:selected").text());
+        if (selection == 1) {
+            olcount = $("#ol_skoring li").length;
+            $("#skoring ol").append("<li><div id='varparam' class='form-group skoringli'><label class='control-label' for='" + tabel + '_' + String(olcount + 1) + "'>Indikator</label><input class='form-control' id='" + tabel + '_' + String(olcount + 1) + "' type='text' name='" + tabel + '_' + String(olcount + 1) + "'></div><a id='hapusparam' href='#' class='btn-xs btn-danger pull-left'><span class='glyphicon glyphicon-remove'></span> Hapus</a></li>");
+        } else if (selection == 2) {
+            olcount = $("#lowestskoring ol").length;
+            console.log('1st level:', olcount)
+            jumlahpilihan = $("#jumlahpilihan").val();
+            $("#pertanyaan").append('<li><div id="varparam" class="form-group skoringli"><label class="control-label" for="focusedInput">Indikator</label><input class="form-control" id="pilgan_' + String(olcount) + '" name="pilgan_' + String(olcount) + '" type="text"><label class="control-label" for="focusedInput">Pilihan</label><div id="pilganda_' + String(olcount) + '"><ol type="a"></ol></div></div></li>');
+            for (i = 0; i < jumlahpilihan; i++) {
+                $("#pilganda_" + String(olcount) + " ol").append("<li><input class='form-control' id='subpil_" + String(olcount) + "_" + String(i + 1) + "' type='text' name='subpil_" + String(olcount) + "_" + String(i + 1) + "'></li>")
+            }
+        } else {
+            $("#formula ol").append('<li>Parameter Formula Baru</li>');
+        }
+    });
+
+
+    $("#simpanparam").click(function() {
+        selection = $("#tipeselect").val();
+        console.log("Tambah parameter", $("#tipeselect option:selected").text());
+        if (selection == 1) {
+            tabel = $("#idvariabel").text();
+            formser = $("#param_skoring").serialize();
+            console.log("SAVE", idvariabel, formser);
+            $.ajax({
+                url: "{{ url_for('simpanvariabel')}}?tabel=" + tabel + "&tipe=" + selection,
+                data: formser,
+                type: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                success: function(response) {
+                    console.log(response);
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+            $.bootstrapGrowl("Tersimpan", {
+                type: 'success'
+            });
+        } else if (selection == 2) {
+            tabel = $("#idvariabel").text();
+            jumlahpilihan = $("#jumlahpilihan").val();
+            formser = $("#param_lowestskoring").serialize();
+            console.log("SAVE", idvariabel, formser);
+            $.ajax({
+                url: "{{ url_for('simpanvariabel2')}}?tabel=" + tabel + "&tipe=" + selection + "&pil=" + jumlahpilihan,
+                data: formser,
+                type: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                success: function(response) {
+                    console.log(response);
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+            $.bootstrapGrowl("Tersimpan", {
+                type: 'success'
+            });
+        } else if (selection == 3) {
+            tabel = $("#idvariabel").text();
+            // jumlahpilihan = $("#jumlahpilihan").val();
+            // formser = $("#param_lowestskoring").serialize();
+            // console.log("SAVE", idvariabel, formser);
+            usedtabelflt = usedtabel.filter(function(elem, index, self) {
+                return index == self.indexOf(elem);
+            });
+            formula = $("#formulaentry").val()
+            $.ajax({
+                url: "{{ url_for('simpanvariabel4')}}?tabel=" + tabel + "&tipe=" + selection,
+                data: {
+                    formula: formula.replace(/\s/g, ''),
+                    tabels: usedtabelflt,
+                    tahun: $("#p_tahun option:selected").text()
+                },
+                type: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                success: function(response) {
+                    console.log(response);
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+            $.bootstrapGrowl("Tersimpan", {
+                type: 'success'
+            });
+        } else if (selection == 4) {
+            tabel = $("#idvariabel").text();
+            $.ajax({
+                url: "{{ url_for('simpanvariabel3')}}?tabel=" + tabel + "&tipe=" + selection,
+                // data: formser,
+                type: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                success: function(response) {
+                    console.log(response);
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+            $.bootstrapGrowl("Tersimpan", {
+                type: 'success'
+            });
+        } else if (selection == 5) {
+            tabel = $("#idvariabel").text();
+            jumlah_kategori = Number($("#jumlahkat_cust").val());
+            jumlah_pertanyaan = Number($("#jumlahpilihan_cust").val());
+            formser = $("#param_skoringcust").serialize();
+            $.ajax({
+                url: "{{ url_for('simpanvariabel5')}}?tabel=" + tabel + "&tipe=" + selection,
+                data: formser,
+                type: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                success: function(response) {
+                    console.log(response);
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+            $.bootstrapGrowl("Tersimpan", {
+                type: 'success'
+            });
+        } else {
+            $("#formula ol").append('<li>Parameter Formula Baru</li>');
+        }
+    });
+
+    $('#skoring').on('click', '#hapusparam', function() {
+        var str = $(this).closest('li').index();
+        console.log('Removed: ', str);
+        $(this).closest('li').remove();
+    });
+
+    $('#lowestskoring').on('click', '#hapusparam', function() {
+        var str = $(this).closest('li').index();
+        console.log('Removed: ', str);
+        $(this).closest('li').remove();
+    });
+
+    $('#listvariabel').click(function(e) {
+        iddata = $(e.target).attr("id");
+        console.log('Clicked:', iddata);
+        vartabel = iddata;
+        $.get("{{ url_for('datadasardesc')}}", {
+                iddata: iddata
+            },
+            function(data) {
+                $('#listsubvariabel').empty();
+                datadasardesc = data;
+                $.each(datadasardesc, function(i, val) {
+                    if (i != 'id' && i != 'kdebps') {
+                        $("#listsubvariabel").append("<a href='#'' class='list-group-item' id='" + String(i) + "'>" + String(i) + "</a>")
+                    }
+                })
+                $("#l_listsubvariabel").show();
+                $("#listsubvariabel").show();
+                $("#listsubvariabel").height('auto');
+                // console.log(data);
+            });
+    });
+
+    $('#tambah').click(function() {
+        $('#formulaentry').val($('#formulaentry').val() + " + ");
+        // $('#formulapre').val($('#formulapre').val() + " + ");
+    });
+    $('#kurang').click(function() {
+        $('#formulaentry').val($('#formulaentry').val() + " - ");
+        // $('#formulapre').val($('#formulapre').val() + " - ");
+    });
+    $('#kali').click(function() {
+        $('#formulaentry').val($('#formulaentry').val() + " * ");
+        // $('#formulapre').val($('#formulapre').val() + " * ");
+    });
+    $('#bagi').click(function() {
+        $('#formulaentry').val($('#formulaentry').val() + " / ");
+        // $('#formulapre').val($('#formulapre').val() + " / ");
+    });
+    $('#pangkat').click(function() {
+        $('#formulaentry').val($('#formulaentry').val() + " ^ ");
+        // $('#formulapre').val($('#formulapre').val() + " ^ ");
+    });
+    $('#kurbu').click(function() {
+        $('#formulaentry').val($('#formulaentry').val() + " ( ");
+        // $('#formulapre').val($('#formulapre').val() + " ( ");
+    });
+    $('#kurtup').click(function() {
+        $('#formulaentry').val($('#formulaentry').val() + " ) ");
+        // $('#formulapre').val($('#formulapre').val() + " ) ");
+    });
+
+    $('#listsubvariabel').click(function(e) {
+        // $('#formulaentry').val($('#formulaentry').val() + " " + $(e.target).attr("id") + " ");
+        $('#formulaentry').val($('#formulaentry').val() + " tb_" + vartabel + "." + $(e.target).attr("id") + " ");
+        // $('#formulapre').val($('#formulapre').val() + " tb_" + vartabel + "." + $(e.target).attr("id") + " ");
+        usedtabel.push("tb_" + vartabel);
+    })
+
+
+    var jumlah_kategori, jumlah_pertanyaan;
+    $("#tambahparam_cust").click(function() {
+        $("#ol_skoringcust").empty();
+        jumlah_kategori = Number($("#jumlahkat_cust").val());
+        jumlah_pertanyaan = Number($("#jumlahpilihan_cust").val());
+        console.log(jumlah_kategori, jumlah_pertanyaan);
+        firstq = 1;
+        for (jk = 0; jk < jumlah_kategori; jk++) {
+            $("#ol_skoringcust").append("<li><div id='custkat_" + String(jk + 1) + "' class='form-group paramlist1'><label class='control-label' for='custkat_" + String(jk + 1) + "'>Kategori</label><input style='width:80%; float:left;' class='form-control' id='custkat_" + String(jk + 1) + "' type='text' name='custkat_" + String(jk + 1) + "'></div><a id='cuskattparam' href='#' class='btn-xs btn-danger pull-left'><span class='glyphicon glyphicon-plus' style='margin-left:1%;'></span> Tambah Pertanyaan</a><ol class='paramlist1' id='subcuskat_" + String(jk + 1) + "'></ol></div></li>");
+            console.log('custkat_' + String(jk + 1));
+            $("#subcuskat_" + String(jk + 1)).append("<li><label class='control-label paramlist1' for='subkat_" + String(jk + 1) + "_" + String(firstq) + "'>Pertanyaan </label><input class='form-control' id='subkat_" + String(jk + 1) + "_" + String(firstq) + "' type='text' name='subkat_" + String(jk + 1) + "_" + String(firstq) + "'><ol class='paramlist1' id='subcuskatq_" + String(jk + 1) + "_" + String(firstq) + "'></ol></li>")
+            for (jp = 0; jp < jumlah_pertanyaan; jp++) {
+                $("#subcuskatq_" + String(jk + 1) + "_" + String(firstq)).append("<li><label class='control-label' for='subcuskatqq_" + String(jk + 1) + "'>Jawaban </label><input class='form-control' id='subcuskatqq_" + String(jk + 1) + "_" + String(firstq) + "_" + String(jp + 1) + "' type='text' name='subcuskatqq_" + String(jk + 1) + "_" + String(firstq) + "_" + String(jp + 1) + "'><label class='control-label' for='subcuskatqqs_" + String(jk + 1) + "'>Skor </label><input class='form-control' id='subcuskatqqs_" + String(jk + 1) + "_" + String(firstq) + "_" + String(jp + 1) + "' type='number' name='subcuskatqqs_" + String(jk + 1) + "_" + String(firstq) + "_" + String(jp + 1) + "'></li>")
+            }
+        }
+    })
+
+    $('#ol_skoringcust').on('click', '#cuskattparam', function(e) {
+        var innern;
+        var subkat = $(this).closest('li').index();
+        var olcount = $("#subcuskat_" + (subkat + 1) + " ol").length;
+        console.log('Tambah: ', subkat, olcount);
+        console.log('Tambah: ', subkat, olcount);
+        $("#subcuskat_" + String(subkat + 1)).append("<li><label class='control-label paramlist1' for='subkat_" + String(subkat + 1) + "_" + String(olcount + 1) + "'>Pertanyaan </label><input class='form-control' id='subkat_" + String(subkat + 1) + "_" + String(olcount + 1) + "' type='text' name='subkat_" + String(subkat + 1) + "_" + String(olcount + 1) + "'><ol class='paramlist1' id='subcuskatq_" + String(subkat + 1) + "_" + String(olcount + 1) + "'></ol></li>")
+        for (jp = 0; jp < jumlah_pertanyaan; jp++) {
+            $("#subcuskatq_" + String(subkat + 1) + "_" + String(olcount + 1)).append("<li><label class='control-label' for='subcuskatqq_" + String(subkat + 1) + "'>Jawaban </label><input class='form-control' id='subcuskatqq_" + String(subkat + 1) + "_" + String(olcount + 1) + "_" + String(jp + 1) + "' type='text' name='subcuskatqq_" + String(subkat + 1) + "_" + String(olcount + 1) + "_" + String(jp + 1) + "'><label class='control-label' for='subcuskatqqs_" + String(subkat + 1) + "'>Skor </label><input class='form-control' id='subcuskatqqs_" + String(subkat + 1) + "_" + String(olcount + 1) + "_" + String(jp + 1) + "' type='number' name='subcuskatqqs_" + String(subkat + 1) + "_" + String(olcount + 1) + "_" + String(jp + 1) + "'></li>")
+        }
+    });
+
+
+    $("#pluskat_cust").click(function() {
+        $("#jumlahkat_cust").val(Number($("#jumlahkat_cust").val()) + 1);
+    })
+
+    $("#minkat_cust").click(function() {
+        if ($("#jumlahkat_cust").val() == '' || $("#jumlahkat_cust").val() == '1') {
+            $("#jumlahkat_cust").val(1);
+        } else {
+            $("#jumlahkat_cust").val(Number($("#jumlahkat_cust").val()) - 1);
+        }
+    })
+
+    $("#plusbreak_cust").click(function() {
+        $("#jumlahpilihan_cust").val(Number($("#jumlahpilihan_cust").val()) + 1);
+    })
+
+    $("#minbreak_cust").click(function() {
+        if ($("#jumlahpilihan_cust").val() == '' || $("#jumlahpilihan_cust").val() == '1') {
+            $("#jumlahpilihan_cust").val(1);
+        } else {
+            $("#jumlahpilihan_cust").val(Number($("#jumlahpilihan_cust").val()) - 1);
+        }
+    })
+</script>
+{% endblock %}

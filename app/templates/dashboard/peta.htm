@@ -1,0 +1,54 @@
+{% extends "dashboard/base.htm" %} {% block content %}
+<!-- page content -->
+<!-- <div class="right_col" role="main"> -->
+<div class="right_col" role="main">
+    <div class="petapeta">
+        <div id="zmap" class="exploremap"></div>
+    </div>
+    <!-- <div class="page-title ">
+            <div class="title_left ">
+                <h3>PETA INTERAKTIF</h3>
+            </div>
+
+            <div class="title_right ">
+
+            </div>
+        </div> -->
+
+    <!-- <div class="clearfix "></div>
+
+        <div class="row "> -->
+
+    <!-- <div class="col-md-12 col-sm-12 col-xs-12 ">
+            <!-- <div id="zmap " class="exploremap "></div> -->
+    <!-- <div class="x_panel ">
+            <div class="x_title ">
+                <h2>Peta Interaktif</h2>
+
+                <div class="clearfix "></div>
+            </div>
+
+        </div> -->
+</div>
+<!-- </div> -->
+
+<!-- </div> -->
+</div>
+</div>
+
+<link rel="stylesheet " href="{{ url_for( 'static', filename='vendors/jelajah/css/peta.css' ) }} " type="text/css " />
+<link rel="stylesheet " href="{{ url_for( 'static', filename='vendors/jelajah/css/ionicons.css' ) }} " type="text/css " />
+<link rel="stylesheet " href="{{ url_for( 'static', filename='vendors/jelajah/css/jelajah.css' ) }} " type="text/css " />
+<link rel="stylesheet " href="{{ url_for( 'static', filename='vendors/jelajah/css/orange.css' ) }} " type="text/css " />
+
+<script src="{{ url_for( 'static', filename='vendors/jelajah/cfg.js' ) }} "></script>
+<script src="{{ url_for( 'static', filename='vendors/jelajah/handlebars/handlebars.min.js' ) }} "></script>
+<script src="{{ url_for( 'static', filename='vendors/jelajah/handlebars/templates.js' ) }} "></script>
+<script src="{{ url_for( 'static', filename='vendors/jelajah/main.js' ) }} "></script>
+<!-- <script src="js/jelajah/petaBaseLayer.js "></script> -->
+<script src="{{ url_for( 'static', filename='vendors/jelajah/jelajah/petaMeasure.js' ) }} "></script>
+<script src="{{ url_for( 'static', filename='vendors/jelajah/jelajah/peta.js' ) }} "></script>
+<script src="{{ url_for( 'static', filename='vendors/jelajah/jelajah/peta.v2.js' ) }} "></script>
+
+<!-- /page content -->
+{% endblock %}

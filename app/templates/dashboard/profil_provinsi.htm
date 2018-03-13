@@ -1,0 +1,907 @@
+{% extends "dashboard/base.htm" %} {% block content %}
+<!-- page content -->
+<div class="right_col" role="main">
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>PROFIL PROVINSI</h3>
+            </div>
+
+            <div class="title_right">
+                <!--<div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+                  <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search for...">
+                    <span class="input-group-btn">
+                      <button class="btn btn-default" type="button">Go!</button>
+                    </span>
+                  </div>
+                </div>-->
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+
+        <div class="row">
+
+            <div class="col-md-10 col-sm-10 col-xs-10">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Provinsi</h2>
+
+                        <div class="clearfix"></div>
+                    </div>
+                    <div id="xd3profil_prov_map" class="x_content" style="height:600px;">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-2 col-sm-2 col-xs-2">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Model</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div id="listmodel" class="x_content" style="height:600px;">
+                        <div class=" form-group">
+                            <div class="col-lg-12">
+                                <select id="p_tahun" name="p_desa" class="form-control">
+                                    <option value="2013">2013</option>
+                                    <option value="2014">2014</option>
+                                    <option value="2015">2015</option>
+                                    <option value="2016">2016</option>
+                                    <option value="2017" selected>2017</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-12 " id="listvariabel">
+                                {%- for item in variabel %}
+                                <a href='#' class='list-group-item' id='{{item.n_variabel}}'>{{item.r_variabel}}</a> {%- endfor %}
+                            </div>
+                            <div class="col-lg-12 " id="listdata">
+                                <a href='#' class='list-group-item' id='kependudukan'>Data Kependudukan</a>
+                                <!-- <a href='#' class='list-group-item' id='pendidikan'>Data Pendidikan</a> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div id="indikatordesa" class="col-md-6 col-sm-6 col-xs-6">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2 id="kabtitle">Kabupaten/Kota</h2>
+
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+
+                        <div id="xd3profil_kab_map" style="height:700px;"></div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div id="indikatorgrafik" class="col-md-6 col-sm-6 col-xs-6">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2 id="destitle">Grafik</h2>
+
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+
+                        <div id="chart1" class="col-md-12 col-sm-12 col-xs-12"></div>
+                        <div id="chart5" class="col-md-12 col-sm-12 col-xs-12"><canvas id="chartradar" style="margin-top: 50px;"></canvas></div>
+                        <div id="chart2" class="col-md-12 col-sm-12 col-xs-12"></div>
+                        <div id="chart3" class="col-md-12 col-sm-12 col-xs-12"></div>
+                        <div id="chart4" class="col-md-12 col-sm-12 col-xs-12"></div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div id="indikatorpanel" class="col-md-6 col-sm-6 col-xs-6">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Indikator</h2>
+
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+
+                        <div id="jawaban" style="overflow-y: auto; height:357px;">
+                            <ol id="olisijawaban"></ol>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<style>
+    svg {
+        position: relative;
+    }
+    
+    path {
+        fill: lightgray;
+        /* fill-opacity: .2; */
+        stroke: #fff;
+        stroke-width: 1px;
+    }
+    
+    path:hover {
+        fill: yellow;
+        fill-opacity: .7;
+        stroke-width: 3px;
+        stroke: white;
+        z-index: 9999999999999;
+    }
+    
+    div.tooltip {
+        color: #222;
+        background: #fff;
+        padding: .5em;
+        text-shadow: #f5f5f5 0 1px 0;
+        border-radius: 2px;
+        box-shadow: 0px 0px 2px 0px #a6a6a6;
+        opacity: 0.9;
+        position: absolute;
+        z-index: 999999999999;
+    }
+    
+    div.tooltipdesa {
+        color: #222;
+        background: #fff;
+        padding: .5em;
+        text-shadow: #f5f5f5 0 1px 0;
+        border-radius: 2px;
+        box-shadow: 0px 0px 2px 0px #a6a6a6;
+        opacity: 0.9;
+        position: absolute;
+        z-index: 999999999999;
+    }
+</style>
+
+<script>
+    var tabel;
+    var tahun;
+    var warnawarni;
+    var variabeldesc;
+    var jawabanparam;
+    var model = true;
+    var posx, posy, centered;
+
+    $(document).ready(function() {
+        $('#indikatorpanel').hide();
+        $('#indikatorgrafik').hide();
+        $('#indikatordesa').hide();
+        provmap();
+    })
+
+    $(document).on("mousemove", function(evt) {
+        posx = evt.pageX;
+        posy = evt.pageY;
+    })
+
+    $(window).resize(function() {
+        $('#xd3profil_prov_map').empty();
+        provmap();
+    })
+
+    var provdiv = d3.select("#xd3profil_prov_map").append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0);
+
+    function provmap() {
+        map_width = $('#xd3profil_prov_map').width();
+        map_height = $('#xd3profil_prov_map').height();
+        console.log(map_width, map_height)
+
+        svg = d3.select("#xd3profil_prov_map").append("svg")
+            .attr("width", map_width)
+            .attr("height", map_height);
+
+        // var tooltip = d3.select("#xd3profil_prov_map ").append("div ")
+        //     .attr("class ", "tooltip ");
+
+        url = "{{ url_for( 'static', filename='data/admin_kab.topojson' ) }}"
+        d3.json(url, function(error, topology) {
+            if (error) throw error;
+            console.log("topojson ", topology)
+            geojson = topojson.feature(topology, topology.objects.admin_kab);
+            console.log("geojson ", geojson)
+
+            center = d3.geo.centroid(geojson)
+            scale = 150;
+            offset = [map_width / 2, map_height / 2];
+            projection = d3.geo.mercator().scale(1).translate([0, 0]);
+
+            console.log(center)
+
+            // create the path
+            path = d3.geo.path().projection(projection);
+            // path = d3.geo.path().projection(funcscale(1, kmap_width, kmap_height));
+
+
+            // using the path determine the bounds of the current map and use 
+            // these to determine better values for the scale and translation
+            bounds = path.bounds(geojson);
+            w = map_width;
+            h = map_height;
+            b = path.bounds(geojson),
+                s = .95 / Math.max((b[1][0] - b[0][0]) / w, (b[1][1] - b[0][1]) / h),
+                t = [(w - s * (b[1][0] + b[0][0])) / 2, (h - s * (b[1][1] + b[0][1])) / 2];
+            hscale = scale * map_width / (bounds[1][0] - bounds[0][0]);
+            vscale = scale * map_height / (bounds[1][1] - bounds[0][1]);
+            scale2 = (hscale < vscale) ? hscale : vscale;
+            offset2 = [map_width - (bounds[0][0] + bounds[1][0]) / 2,
+                map_height - (bounds[0][1] + bounds[1][1]) / 2
+            ];
+            console.log(hscale, vscale, scale, offset);
+            // new projection
+            // projection = d3.geo.mercator().center(center).scale(scale2).translate(offset2);
+            projection
+                .scale(s)
+                .translate(t);
+
+            // path = path.projection(projection);
+
+            svg.selectAll("path")
+                .data(geojson.features)
+                .enter().append("path")
+                .attr("d", path)
+                .attr("class", "kdebps")
+                .on("mouseover", function(d) {
+                    provdiv.transition()
+                        .duration(200)
+                        .style("opacity", .9);
+                    provdiv.html(d.properties.kabupaten)
+                        .style("left", (d3.event.layerX + 95) + "px")
+                        .style("top", (d3.event.layerY + 120) + "px");
+                })
+                .on("mouseout", function(d) {
+                    provdiv.transition()
+                        .duration(500)
+                        .style("opacity", 0);
+                })
+                .on('mousedown.log', function(d) {
+                    $('#indikatordesa').show();
+                    $('#xd3profil_kab_map').show();
+                    console.log(d.properties.kdbbps);
+                    $("#kabtitle").text(d.properties.kabupaten + ' (' + d.properties.kdbbps + ')')
+                    $("#chart1").empty();
+                    $("#chart2").empty();
+                    $("#chart3").empty();
+                    $("#chart4").empty();
+                    if (model) {
+                        svg_kab(d.properties.kdbbps)
+                        kabgraph(d.properties.kdbbps)
+                    } else {
+                        svg_data(d.properties.kdbbps)
+                    }
+                }).on("click", function(d) {
+                    d3.selectAll('path').style('stroke', 'white');
+                    d3.selectAll('path').style('stroke-width', '1px');
+                    d3.select(this).style('stroke', 'red');
+                    d3.select(this).style('z-index', '9999999999');
+                    d3.select(this).style('stroke-width', '4px');
+                    clicked(d);
+                });
+        });
+    }
+
+    function svg_kab(kdbbps) {
+        $('#indikatorgrafik').show();
+        $("#chart1").show()
+        $("#xd3profil_kab_map").empty()
+        kabdiv = d3.select("#xd3profil_kab_map").append("div")
+            .attr("class", "tooltipdesa")
+            .style("opacity", 0);
+        kmap_width = $('#xd3profil_kab_map').width();
+        kmap_height = $('#xd3profil_kab_map').height();
+        console.log(kmap_width, kmap_height)
+
+        ksvg = d3.select("#xd3profil_kab_map").append("svg")
+            .attr("width", kmap_width)
+            .attr("height", kmap_height);
+
+        // var tooltip = d3.select("#xd3profil_prov_map ").append("div ")
+        //     .attr("class ", "tooltip ");
+
+        function funcscale(scaleFactor, width, height) {
+            return d3.geo.transform({
+                point: function(x, y) {
+                    this.stream.point((x - width / 2) * scaleFactor + width / 2, (y - height / 2) * scaleFactor + height / 2);
+                }
+            });
+        }
+
+        kurl = "/static/data/" + kdbbps + '.topojson'
+        d3.json(kurl, function(error, topology) {
+            if (error) throw error;
+            topo = 'topology.objects.' + kdbbps
+            console.log("ktopojson", topology)
+            geojson = topojson.feature(topology, topology.objects.units);
+            console.log("kgeojson", geojson)
+
+            center = d3.geo.centroid(geojson)
+                // scale = 1;
+            scale = (kmap_width - 3) / (2 * Math.PI);
+            offset = [kmap_width / 2, kmap_height / 2];
+            projection = d3.geo.mercator().scale(scale).translate(offset);
+
+            projection = d3.geo.mercator().scale(1).translate([0, 0]);
+
+            console.log(center)
+
+            // create the path
+            path = d3.geo.path().projection(projection);
+            // path = d3.geo.path().projection(funcscale(1, kmap_width, kmap_height));
+
+
+            // using the path determine the bounds of the current map and use 
+            // these to determine better values for the scale and translation
+            bounds = path.bounds(geojson);
+            w = kmap_width;
+            h = kmap_height;
+            b = path.bounds(geojson),
+                s = .95 / Math.max((b[1][0] - b[0][0]) / w, (b[1][1] - b[0][1]) / h),
+                t = [(w - s * (b[1][0] + b[0][0])) / 2, (h - s * (b[1][1] + b[0][1])) / 2];
+            hscale = scale * kmap_width / (bounds[1][0] - bounds[0][0]);
+            vscale = scale * kmap_height / (bounds[1][1] - bounds[0][1]);
+            scale2 = (hscale < vscale) ? hscale : vscale;
+            offset2 = [kmap_width - (bounds[0][0] + bounds[1][0]) / 2,
+                kmap_height - (bounds[0][1] + bounds[1][1]) / 2
+            ];
+            console.log(hscale, vscale, scale, offset);
+            // new projection
+            // projection = d3.geo.mercator().center(center).scale(scale2).translate(offset2);
+            projection
+                .scale(s)
+                .translate(t);
+
+            // path = path.projection(projection);
+
+            ksvg.selectAll("path")
+                .data(geojson.features)
+                .enter().append("path")
+                .attr("d", path)
+                .attr("idbpsdesa", function(d) {
+                    return d.properties.idbpsdesa
+                })
+                .attr("desa", function(d) {
+                    return d.properties.desa
+                })
+                .on("mouseover", function(d) {
+                    kabdiv.transition()
+                        .duration(200)
+                        .style("opacity", .9);
+                    kabdiv.html(d.properties.desa)
+                        .style("left", (posx - 300) + "px")
+                        .style("top", (posy - 900) + "px");
+                })
+                .on("mouseout", function(d) {
+                    kabdiv.transition()
+                        .duration(500)
+                        .style("opacity", 0);
+                })
+                .on('mousedown.log', function(d) {
+                    $("#chart1").show()
+                    $("#chart2").hide()
+                    $("#chart3").hide()
+                    $("#chart4").hide()
+                    $('#indikatorpanel').show()
+                    $("#xd3profil_kab_map").show()
+                    $('#indikatorgrafik').show();
+                    $("#destitle").text(d.properties.desa)
+                    console.log(d.properties.idbpsdesa, d.properties.desa);
+                    if (tabel == 't_pesisir') {
+                        $('#indikatorpanel').hide()
+                        $('#chartradar').show();
+                        setTimeout(function() {
+                            pesisir(d.properties.idbpsdesa)
+                        }, 1000);
+                    } else {
+                        $('#chartradar').hide();
+                        setTimeout(function() {
+                            jawabanindikator(d.properties.idbpsdesa);
+                            indikator();
+                        }, 1000);
+                    }
+                })
+                .style("fill", function(d) {
+                    // console.log(getcolor(d.properties.idbpsdesa))
+                    return getcolor(d.properties.idbpsdesa)
+                })
+                // ksvg.selectAll(".idbpsdesa")
+                //     .data(geojson.features)
+                //     .style("fill", warna);
+        });
+    }
+
+    var getcolor = function(my_key) {
+        return warnawarni[my_key];
+    }
+
+    function kabgraph(kdbbps) {
+        tahun = $("#p_tahun").val()
+        graphdata1c3color = {}
+        $.get("{{ url_for('grafmodel1c3')}}" + '?tabel=' + tabel + '&tahun=' + tahun + '&kode=' + kdbbps,
+            function(data) {
+                window.graphdata1c3 = data;
+                console.log(data);
+                $.get("/kategoridesc", {
+                    variabel: String(tabel)
+                }, function(data) {
+                    kategoridesc = data;
+                    for (i = 0; i < data[0]['v_color'].split(',').length; i++) {
+                        graphdata1c3color[data[0]['r_break'].split(',')[i]] = data[0]['v_color'].split(',')[i]
+                    }
+                    // console.log(graphdata1c3color)
+                    for (i = 0; i < graphdata1c3.length; i++) {
+                        // console.log(graphdata1c3[i])
+                    }
+                    // console.log(graphdata1c3color)
+                    var chart = c3.generate({
+                        bindto: '#chart1',
+                        size: {
+                            height: 250,
+                        },
+                        data: {
+                            columns: graphdata1c3,
+                            type: 'bar',
+                            colors: graphdata1c3color,
+                        },
+                        axis: {
+                            rotated: true
+                        }
+                    });
+                });
+            });
+        // console.log(graphdata1c3)
+    }
+
+    $('#listvariabel').click(function(e) {
+        tahun = $("#p_tahun").val()
+        tabel = $(e.target).attr("id");
+        model = true;
+        $("#xd3profil_kab_map").empty()
+        $("#xd3profil_kab_map").hide()
+            // $('#indikatorpanel').empty();
+        $('#indikatorpanel').hide();
+        $('#indikatorgrafik').hide();
+        $('#indikatordesa').hide();
+        $('#chartradar').hide();
+        $("#chart1").hide()
+        $("#chart2").hide()
+        $("#chart3").hide()
+        $("#chart4").hide()
+        $.get("{{ url_for('mapcolor')}}" + '?tabel=' + tabel + '&tahun=' + tahun,
+            function(data) {
+                warnawarni = data;
+            });
+    });
+
+    $('#listdata').click(function(e) {
+        tahun = $("#p_tahun").val()
+        tabel = $(e.target).attr("id");
+        model = false;
+        $("#xd3profil_kab_map").empty()
+        $("#xd3profil_kab_map").hide()
+            // $('#indikatorpanel').empty();
+        $('#indikatorpanel').hide();
+        $('#indikatorgrafik').hide();
+        $('#indikatordesa').hide();
+        $('#chartradar').hide();
+        $("#chart1").hide()
+        $("#chart2").hide()
+        $("#chart3").hide()
+        $("#chart4").hide()
+        console.log(tabel)
+            // $.get("{{ url_for('mapcolor')}}" + '?tabel=' + tabel + '&tahun=' + tahun,
+            //     function(data) {
+            //         warnawarni = data;
+            //     });
+    });
+
+    var padatcolors = d3.scale.linear()
+        .domain([0, 500, 1000, 2500, 5000, 7500, 10000, 12500, 15000])
+        .range(colorbrewer.Blues[5]);
+
+    function svg_data(kdbbps) {
+        $("#xd3profil_kab_map").empty()
+        kabdiv = d3.select("#xd3profil_kab_map").append("div")
+            .attr("class", "tooltipdesa")
+            .style("opacity", 0);
+        kmap_width = $('#xd3profil_kab_map').width();
+        kmap_height = $('#xd3profil_kab_map').height();
+
+        ksvg = d3.select("#xd3profil_kab_map").append("svg")
+            .attr("width", kmap_width)
+            .attr("height", kmap_height);
+
+        // var tooltip = d3.select("#xd3profil_prov_map ").append("div ")
+        //     .attr("class ", "tooltip ");
+
+        kurl = "/static/data/" + kdbbps + '_kependudukan.topojson'
+        d3.json(kurl, function(error, topology) {
+            if (error) throw error;
+            topo = 'topology.objects.' + kdbbps
+            console.log("ktopojson", topology)
+            geojson = topojson.feature(topology, topology.objects.units);
+            console.log("kgeojson", geojson)
+
+            center = d3.geo.centroid(geojson)
+            scale = 1;
+            offset = [kmap_width / 2, kmap_height / 2];
+            projection = d3.geo.mercator().scale(1).translate([0, 0]);
+
+            console.log(center)
+
+            // create the path
+            path = d3.geo.path().projection(projection);
+            // path = d3.geo.path().projection(funcscale(1, kmap_width, kmap_height));
+
+
+            // using the path determine the bounds of the current map and use 
+            // these to determine better values for the scale and translation
+            bounds = path.bounds(geojson);
+            w = kmap_width;
+            h = kmap_height;
+            b = path.bounds(geojson),
+                s = .95 / Math.max((b[1][0] - b[0][0]) / w, (b[1][1] - b[0][1]) / h),
+                t = [(w - s * (b[1][0] + b[0][0])) / 2, (h - s * (b[1][1] + b[0][1])) / 2];
+            hscale = scale * kmap_width / (bounds[1][0] - bounds[0][0]);
+            vscale = scale * kmap_height / (bounds[1][1] - bounds[0][1]);
+            scale2 = (hscale < vscale) ? hscale : vscale;
+            offset2 = [kmap_width - (bounds[0][0] + bounds[1][0]) / 2,
+                kmap_height - (bounds[0][1] + bounds[1][1]) / 2
+            ];
+            console.log(hscale, vscale, scale, offset);
+            // new projection
+            // projection = d3.geo.mercator().center(center).scale(scale2).translate(offset2);
+            projection
+                .scale(s)
+                .translate(t);
+
+            // path = path.projection(projection);
+
+            ksvg.selectAll("path")
+                .data(geojson.features)
+                .enter().append("path")
+                .attr("d", path)
+                .attr("idbpsdesa", function(d) {
+                    return d.properties.idbpsdesa
+                })
+                .attr("desa", function(d) {
+                    return d.properties.desa
+                })
+                .attr("kepadatan", function(d) {
+                    return d.properties.kepadatan_1
+                })
+                .on("mouseover", function(d) {
+                    kabdiv.transition()
+                        .duration(200)
+                        .style("opacity", .9);
+                    kabdiv.html(d.properties.desa)
+                        .style("left", (posx - 300) + "px")
+                        .style("top", (posy - 900) + "px");
+                })
+                .on("mouseout", function(d) {
+                    kabdiv.transition()
+                        .duration(500)
+                        .style("opacity", 0);
+                })
+                .on('mousedown.log', function(d) {
+                    $("#xd3profil_kab_map").show()
+                    $('#indikatorgrafik').show();
+                    $("#chart1").hide()
+                    $("#chart2").show()
+                    $("#chart3").show()
+                    $("#chart4").show()
+                    $("#destitle").text(d.properties.desa)
+                    console.log(d.properties)
+                    console.log(d.properties.idbpsdesa, d.properties.desa, d.properties.kepadatan_1);
+                    getdata(d.properties.idbpsdesa);
+                    if (tabel == 't_pesisir') {
+                        setTimeout(function() {
+                            pesisir(d.properties.idbpsdesa)
+                        }, 1000);
+                    } else {
+                        setTimeout(function() {
+                            prop1();
+                            ages1();
+                            tamatsekolah1();
+                        }, 1000);
+                    }
+                    // jawabanindikator(d.properties.idbpsdesa);
+                    // indikator();
+                })
+                .style("fill", function(d) {
+                    return padatcolors(Number(d.properties.kepadatan_1))
+                        // console.log(getcolor(d.properties.idbpsdesa))
+                        // return getcolor(d.properties.idbpsdesa)
+                })
+                // ksvg.selectAll(".idbpsdesa")
+                //     .data(geojson.features)
+                //     .style("fill", warna);
+        });
+    }
+
+    function jawabanindikator(kode) {
+        tahun = $("#p_tahun").val()
+        $.get("/getjawaban?tabel=" + tabel + '&tahun=' + tahun + '&kode=' + kode,
+            function(data) {
+                console.log("JAWABAN:", data);
+                window.jawabanparam = data;
+            });
+    }
+
+    function indikator() {
+        tahun = $("#p_tahun").val()
+        sleep(1000);
+        $.get("/variabel/detail/" + String(tabel),
+            function(data) {
+                tipe = data['tipe'];
+                window.variabeldesc = data;
+                $("#jawaban ol").empty();
+                if (tipe == 1) {
+                    $.each(variabeldesc, function(i, val) {
+                        if (String(i) != 'tipe') {
+                            jawabankolom = jawabanparam[String(i)]
+                            result = '';
+                            if (jawabankolom) {
+                                result = 'YA'
+                            } else {
+                                result = 'TIDAK'
+                            }
+                            $("#jawaban ol").append('<li><div id="varparam" class="form-group skoringli">' + val + '<p><strong>' + result + '</strong></div></li>');
+                        }
+                    })
+                };
+                if (tipe == 2) {
+                    $.each(variabeldesc, function(i, val) {
+                        if (String(i) != 'tipe') {
+                            $("#isivariabel ol").append('<li><div id="varparam" class="form-group skoringli"><label class="control-label" for="focusedInput">' + val + '</label><input class="form-control" id="focusedInput" type="text"></div></li>');
+                        }
+                    })
+                };
+                if (tipe == 3) {
+                    $("#isivariabel ol").append('Tipe Formula, dihitung otomatis');
+                }
+            });
+    }
+
+    var datapenduduk;
+    var datapendidikan;
+    var proporsi_penduduk = [];
+    var rentang_umur = [];
+    var pendidikansekolah = [];
+
+    function getdata(kode) {
+        $.get("/penduduk?kode=" + kode,
+            function(data) {
+                console.log("PENDUDUK:", data);
+                window.proporsi_penduduk = [];
+                window.rentang_umur = [];
+                window.datapenduduk = data;
+                window.proporsi_penduduk.push(['Laki-laki', data.laki])
+                window.proporsi_penduduk.push(['Perempuan', data.perempuan])
+                window.rentang_umur.push(['Umur 0-4 Tahun', data.r_0_4])
+                window.rentang_umur.push(['Umur 5-9 Tahun', data.r_5_9])
+                window.rentang_umur.push(['Umur 10-14 Tahun', data.r_10_14])
+                window.rentang_umur.push(['Umur 15-19 Tahun', data.r_15_19])
+                window.rentang_umur.push(['Umur 20-24 Tahun', data.r_20_24])
+                window.rentang_umur.push(['Umur 25-29 Tahun', data.r_25_29])
+                window.rentang_umur.push(['Umur 30-34 Tahun', data.r_30_34])
+                window.rentang_umur.push(['Umur 35-39 Tahun', data.r_35_39])
+                window.rentang_umur.push(['Umur 40-44 Tahun', data.r_40_44])
+                window.rentang_umur.push(['Umur 45-49 Tahun', data.r_45_49])
+                window.rentang_umur.push(['Umur 50-54 Tahun', data.r_50_54])
+                window.rentang_umur.push(['Umur 55-59 Tahun', data.r_55_59])
+                window.rentang_umur.push(['Umur 60-64 Tahun', data.r_60_64])
+                window.rentang_umur.push(['Umur 65-69 Tahun', data.r_65_69])
+                window.rentang_umur.push(['Umur 70-74 Tahun', data.r_70_74])
+                window.rentang_umur.push(['Umur >75 Tahun', data.r_75_])
+            });
+        $.get("/pendidikan?kode=" + kode,
+            function(data) {
+                console.log("PENDIDIKAN:", data);
+                window.pendidikansekolah = [];
+                window.datapendidikan = data;
+                window.pendidikansekolah.push(['Tidak Sekolah', data.tidak_sekolah])
+                window.pendidikansekolah.push(['Tamat SD', data.tamat_sd])
+                window.pendidikansekolah.push(['Tamat SMP', data.tamat_smp])
+                window.pendidikansekolah.push(['Tamat SMA', data.tamat_slta])
+                window.pendidikansekolah.push(['Tamat SMK', data.tamat_smk])
+                window.pendidikansekolah.push(['Tamat D1/D2', data.tamat_d1_d2])
+                window.pendidikansekolah.push(['Tamat D3', data.tamat_d3])
+                window.pendidikansekolah.push(['Tamat D4/S1', data.tamat_d4_s1])
+                window.pendidikansekolah.push(['Tamat S2/S3', data.tamat_s2_s3])
+            });
+    }
+
+    function prop1() {
+        var chart = c3.generate({
+            bindto: '#chart2',
+            size: {
+                height: 250,
+            },
+            data: {
+                columns: proporsi_penduduk,
+                type: 'donut',
+                onclick: function(d, i) {
+                    console.log("onclick", d, i);
+                },
+                onmouseover: function(d, i) {
+                    console.log("onmouseover", d, i);
+                },
+                onmouseout: function(d, i) {
+                    console.log("onmouseout", d, i);
+                }
+            },
+            donut: {
+                title: "Proporsi Penduduk"
+            }
+        });
+    }
+
+    function ages1() {
+        var chart = c3.generate({
+            bindto: '#chart3',
+            size: {
+                height: 250,
+            },
+            data: {
+                columns: rentang_umur,
+                type: 'bar',
+                // colors: graphdata1c3color,
+            },
+            axis: {
+                rotated: false
+            }
+        });
+    }
+
+    function tamatsekolah1() {
+        var chart = c3.generate({
+            bindto: '#chart4',
+            size: {
+                height: 250,
+            },
+            data: {
+                columns: pendidikansekolah,
+                type: 'bar',
+                // colors: graphdata1c3color,
+            },
+            axis: {
+                rotated: false
+            }
+        });
+    }
+
+    var pesisirdata;
+
+    function pesisir(kode) {
+        tahun = $("#p_tahun").val()
+        $.get("/pesisir?kode=" + kode + '&tahun=' + tahun,
+            function(data) {
+                window.pesisirdata = data;
+                var marksCanvas = document.getElementById("chartradar");
+                var context = marksCanvas.getContext("2d")
+                context.clearRect(0, 0, marksCanvas.width, marksCanvas.height);
+
+                var marksData = {
+                    labels: ["Aspek Manusia", "Aspek Usaha", "Aspek Sumberdaya", "Aspek Lingkungan & Infrastruktur", "Aspek Siaga Bencana & Perubahan Iklim"],
+                    datasets: [{
+                        label: "Desa Pesisir Tangguh",
+                        backgroundColor: "rgba(200,0,0,0.2)",
+                        data: data
+                    }]
+                };
+
+                var radarChart = new Chart(marksCanvas, {
+                    type: 'radar',
+                    data: marksData
+                });
+
+            });
+    }
+
+    function clicked(d) {
+        var x, y, k;
+
+        if (d && centered !== d) {
+            var centroid = path.centroid(d);
+            x = centroid[0];
+            y = centroid[1];
+            k = 4;
+            centered = d;
+        } else {
+            x = map_width / 2;
+            y = map_height / 2;
+            k = 1;
+            centered = null;
+        }
+
+        // path = d3.geo.path().projection(projection);
+        w = map_width;
+        h = map_height;
+        b = path.bounds(d);
+        s = .95 / Math.max((b[1][0] - b[0][0]) / w, (b[1][1] - b[0][1]) / h),
+            t = [(w - s * (b[1][0] + b[0][0])) / 2, (h - s * (b[1][1] + b[0][1])) / 2];
+
+        console.log(b, s, t, x, y)
+        projection
+            .scale(s)
+            .translate(t);
+
+        svg.selectAll("path")
+            .classed("active", centered && function(d) {
+                return d === centered;
+            });
+
+        svg.transition()
+            .duration(750)
+            .attr("transform", "scale(" + s + ")translate(" + t + ")")
+            .style("stroke-width", 1.5 / k + "px");
+    }
+
+    // d3.select("#xd3profil_prov_map ").on("mousedown.log ", function() {
+    //     console.log(d3.event.srcElement);
+    // });
+
+
+    // var map = d3.geomap()
+    //     .geofile("{{ url_for( 'static', filename='data/gdam_33.topojson' ) }} ")
+    //     .height(map_height)
+    //     .width(map_width)
+    //     .units('gdam_33')
+
+    // d3.select('#d3profil_prov_map')
+    //     .call(map.draw, map);
+
+    // var map = new L.Map("profil_prov_map ", {
+    //     center: [-7, 110],
+    //     zoom: 8
+    // });
+    // var tiles = L.tileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png ");
+    // tiles.addTo(map);
+
+    // var kabupaten = [];
+    // var kabupatenOverlay = L.d3SvgOverlay(function(sel, proj) {
+
+    //     var upd = sel.selectAll('path').data(kabupaten);
+    //     upd.enter()
+    //         .append('path')
+    //         .attr('d', proj.pathFromGeojson)
+    //         .attr('stroke', 'black')
+    //         .attr('fill', function() {
+    //             return d3.hsl(Math.random() * 360, 0.9, 0.5)
+    //         })
+    //         .attr('fill-opacity', '0.5');
+    //     upd.attr('stroke-width', 1 / proj.scale);
+    // });
+
+    // L.control.layers({
+    //     "Base Map ": tiles
+    // }, {
+    //     "Kabupaten ": kabupatenOverlay
+    // }).addTo(map);
+
+    // d3.json("{{ url_for( 'static', filename='data/gdam_33.geojson' ) }} ", function(data) {
+    //     kabupaten = data.features;
+    //     kabupatenOverlay.addTo(map)
+    // });
+</script>
+
+<!-- /page content -->
+{% endblock %}

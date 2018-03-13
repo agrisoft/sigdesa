@@ -1,0 +1,117 @@
+{% extends "dashboard/base.htm" %} {% block content %}
+<div class="right_col" role="main">
+    <!-- <div class="title_left">
+
+    </div> -->
+    <hr class="soft" />
+    <div class="x_panel">
+        <!-- <h2>Kategori</h2> -->
+        <div class="x_title">
+            <h2>DATA DETAIL</h2>
+            <div class="clearfix"></div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="nav-table">
+            <div class="title-left">
+                <div class="col-md-4 col-sm-4 col-xs-12" style="padding:0;"></div>
+            </div>
+            <div class="title-right">
+                <div class="col-md-8 col-sm-4 col-xs-12" style="padding:0; margin-bottom:10px;">
+                    <div class="btn-group pull-right">
+                        <a id="importmplds" class="btn btn-warning"><span class="glyphicon glyphicon-floppy-open"></span> Impor Data</a>
+                        <a id="eksportmplds" class="btn btn-warning"><span class="glyphicon glyphicon-floppy-open"></span> Ekspor Template</a>
+                        <a href="{{ url_for('isidatadasar') }}?tabel={{tabel}}" class="btn btn-info"><span class="glyphicon glyphicon-plus"></span> Isi Data</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr class="soft" />
+        <!-- <form class="form-inline navbar-search" method="get" action="{{ url_for('datadasar')}}">
+            <div class="input-group">
+                <input name="cari" id="srchFld" class="form-control" type="text" />
+                <div class="input-group-btn">
+                    <button type="submit" id="submitButton" class="btn btn-default">Cari</button>
+                </div>
+            </div>
+        </form> -->
+        {{pagination.info}} {{pagination.links}}
+        <div class="table-responsive col-md-12 col-sm-12 col-xs-12">
+            <table class="table table-striped jambo_table bulk_action">
+                <thead>
+                    <tr>
+                        {%- for item in result2 %}
+                        <th>{{ item[0] }}</th>{%- endfor %}
+                        <!-- <th style="min-width: 150px; width: 150px;">Aksi</th> -->
+                    </tr>
+                </thead>
+                <tr>
+
+                    {%- for item in result %}
+                    <tr>
+                        {% for elem in item %}
+                        <td>{{ elem }}</td>
+                        {% endfor %}
+                        <!-- <td>
+                            <div class="btn-group btn-group-justified">
+                                <a href="{{ url_for('datadasardetail')}}" class="btn btn-info" role="button"><span class="glyphicon glyphicon-list"></span></a>
+                                <a href="{{ url_for('datadasaredit')}}" class="btn btn-warning"><span class="glyphicon glyphicon-edit"></span></a>
+                                <a href="{{ url_for('variabeldelete_dum') }}" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></a>
+                            </div>
+                        </td> -->
+                    </tr>
+                    {%- endfor %}
+                </tr>
+            </table>
+        </div>
+        <!-- {{pagination.links}} -->
+    </div>
+</div>
+
+
+
+<link href="{{ url_for('static', filename='app/fine-uploader.css') }}" rel="stylesheet" type="text/css" />
+<script src="{{ url_for('static', filename='vendors/recline/underscore.js') }}"></script>
+<script src="{{ url_for('static', filename='vendors/recline/backbone.js') }}"></script>
+<script src="{{ url_for('static', filename='vendors/recline/recline.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='app/fine-uploader.js') }}"></script>
+
+<script>
+    // var dataset = new recline.Model.Dataset({
+    //     records: data
+    // });
+    function makefileid() {
+        var text = "";
+        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+        for (var i = 0; i < 5; i++)
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+        return text;
+    }
+
+    $("#eksportmplds").click(function() {
+        tabel = Url.get.n_datadasar;
+        window.open("{{ url_for('eksportmplds')}}?tabel=" + tabel, '_blank');
+    });
+
+    $("#importmplds").click(function() {
+        tabel = Url.get.n_datadasar;
+        var xlsxUploader = new qq.FineUploaderBasic({
+            button: document.getElementById("importmplds"),
+            autoUpload: true,
+            multiple: false,
+            request: {
+                endpoint: '/impordatads?tabel=' + tabel
+            },
+            validation: {
+                allowedExtensions: ['xlsx', 'XLSX']
+            }
+        });
+        // $.bootstrapGrowl("Tersimpan", {
+        //     type: 'success'
+        // });
+        // location.reload();
+    })
+</script>
+
+{% endblock %}

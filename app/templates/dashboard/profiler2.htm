@@ -1,0 +1,313 @@
+{% extends "dashboard/base.htm" %} {% block content %}
+<!-- page content -->
+<div class="right_col" style="padding:0px;" role="main">
+    <div class="">
+        <div class="row home-full">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="home-full dashboard_graph x_panel">
+
+                    <div class="x_content" style="padding:0;">
+                        <div class="x_title" style="margin-bottom:0px;margin-left: 5px;">
+                            <h2 id="kdesatext">JAWA TENGAH</h2>
+                            <ul class="nav navbar-right panel_toolbox">
+                            </ul>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div id="cariadm" class="col-md-3 col-sm-6 col-xs-6">
+
+                            <div id='carigrup' class="input-group">
+                                <input id="cariteks" type="text" class="form-control input" placeholder="Cari" />
+                                <div class="input-group-btn">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                                <span id="search_concept">Semua</span> <span class="caret"></span>
+                                            </button>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li id="carikode">Kode BPS</li>
+                                        <li id="caridesa">Desa</li>
+                                        <li id="carikab">Kabupaten</li>
+                                        <li class="divider"></li>
+                                        <li id="carisemua">Semua</li>
+                                    </ul>
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg" id="btn_cariadm"><i class="glyphicon glyphicon-search"></i></button>
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- <div class="x_title" style="margin-bottom:0px;margin-left: 5px;">
+
+                        </div> -->
+                        <div class="custom-listdesa col-md-3 col-sm-3 col-xs-12">
+                            <button id="btn-desa-mandiri" class="custom-title btn-desa-dropdown btn btn-default" style="margin-right: 0; padding: 6px 12px;">Desa Mandiri</button>
+                            <ul id="list-desamandiri" class="unselectable" style="height:79vh;">
+                                {%- for item in variabel %}
+                                <div id="{{item.n_variabel}}" style="display: none;">{{item.deskripsi}}</div>
+                                <li id="{{item.n_variabel}}"><label id="{{item.n_variabel}}"><input id="{{item.n_variabel}}" class="custom-radio" type="radio" name="layer" value="jalan"> <strong id="{{item.n_variabel}}">{{item.r_variabel}}</strong></label></li>
+                                {%- endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                    <div id="barnone" class="x_content custom-content">
+                        <div class="d3container" style="height:70vh;width:100%; background:#666;" id="d3map">
+                            <!-- <div class="content-legenda">
+                                <div class="x_title x_title-legenda">
+                                    <h2 id="title_legenda">Legenda</h2>
+                                    <ul class="nav navbar-right panel_toolbox x_icon-legenda">
+                                        <li><a class="collapse-legenda"><i class="fa fa-chevron-down"></i></a>
+                                        </li>
+                                    </ul>
+                                    <div class="x_content-legenda">
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div> -->
+                        </div>
+                        <div class="col-md-12 col-sm-12 col-sx-12 pull-right" style="background: #ebf4f7; height: 40px;padding-left: 0px; width: 100%;">
+                            <div class="content-hook-down col-md-3 col-sm-3 col-xs-12">
+                                <div class="option-desa col-md-3 col-sm-3 col-xs-12">
+                                    <div id="dropup-datadasar" class="dropup option-profile-desa">
+                                        <button class="btn-desa-dropdown btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Data Dasar
+                                        <span class="caret" style="display:none;"></span></button>
+                                        <div class="desa-dropdown dropdown-menu">
+                                            <div id="listdatadasar" class="dropdown-submenu desa-dropdown">
+
+                                            </div>
+                                            <div>
+                                                <ul id="listvariabel" class="desa-dropdown dropdown-menu" style="padding-bottom:0;">
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix year"></div>
+                    <div class="clearfix year"></div>
+                    <div class="wizard_horizontal" style="display: none">
+                        <ul id="tahun-selector" class="wizard_steps anchor custom-step">
+                            <li id="2015">
+                                <a href="#" class="disabled" rel="1">
+                                    <span class="step_no"></span>
+                                    <span class="step_descr">
+                                                2015<br>
+                                            </span>
+                                </a>
+                            </li>
+                            <li id="2016">
+                                <a href="#" class="disabled" rel="2">
+                                    <span class="step_no"></span>
+                                    <span class="step_descr">
+                                                2016<br>
+                                            </span>
+                                </a>
+                            </li>
+                            <li id="2017">
+                                <a href="#" class="selected" rel="3">
+                                    <span class="step_no"></span>
+                                    <span class="step_descr">
+                                                2017<br>
+                                            </span>
+                                </a>
+                            </li>
+                            <li id="2018">
+                                <a href="#" class="disabled" rel="4">
+                                    <span class="step_no"></span>
+                                    <span class="step_descr">
+                                                2018<br>
+                                            </span>
+                                </a>
+                            </li>
+                            <li id="2019">
+                                <a href="#" class="disabled" rel="5">
+                                    <span class="step_no"></span>
+                                    <span class="step_descr">
+                                                    2019<br>
+                                                </span>
+                                </a>
+                            </li>
+                            <li id="2020">
+                                <a href="#" class="disabled" rel="6">
+                                    <span class="step_no"></span>
+                                    <span class="step_descr">
+                                                    2020<br>
+                                                </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="" role="tabpanel" data-example-id="togglable-tabs">
+                        <ul id="myTab" class="custom-step nav nav-tabs bar_tab bar_tabs" role="tablist">
+                            <li role="presentation" class=""><a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="false">Desa Mandiri</a>
+                            </li>
+                            <li role="presentation" class="active"><a href="#tab_content2" role="tab" id="profile-tab" data-toggle="tab" aria-expanded="false">Profile</a>
+                            </li>
+                        </ul>
+                        <div id="myTabContent" class="tab-content">
+                            <div role="tabpanel" class="tab-pane fade" id="tab_content1" aria-labelledby="home-tab">
+
+                                <div id="md_judul" class="col-md-4 col-sm-12 col-xs-12">
+                                    <div class="x_title">
+                                        <h2 id="modeltext">Judul</h2>
+                                        <ul class="nav navbar-right panel_toolbox">
+                                        </ul>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div class="x_content" id="deskripsimodel">
+                                    </div>
+                                    <!-- <div id="modelprofile" class="col-md-12 col-sm-12 col-xs-12"></div> -->
+                                </div>
+                                <div id="md_grafik" class="col-md-8 col-sm-12 col-xs-12">
+                                    <div class="x_title">
+                                        <h2 id="kdesatext">JAWA TENGAH</h2>
+                                        <ul class="nav navbar-right panel_toolbox">
+                                        </ul>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div class="x_content">
+                                        <div id="mainb">
+                                            <div id="chart1" class="col-md-12 col-sm-12 col-xs-12"></div>
+                                            <canvas id="chartradar" style="margin-top: 50px;"></canvas>
+                                        </div>
+                                    </div>
+                                    <div class="x_content">
+                                        <div id="intervensi">
+                                        </div>
+                                    </div>
+                                    <div class="x_content">
+
+                                        <div id="jawaban" style="overflow-y: auto; height:357px;">
+                                            <div class="x_title">
+                                                <h2>Indikator</h2>
+                                                <ul class="nav navbar-right panel_toolbox">
+                                                </ul>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                            <ol id="olisijawaban"></ol>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="masterprofile" class="col-md-12 col-sm-12 col-xs-12">
+                                    <div class="x_title">
+                                        <h2 id="kdesatext">JAWA TENGAH</h2>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div id="modelprofile"></div>
+                                </div>
+
+                            </div>
+                            <div role="tabpanel" class="tab-pane fade in active" id="tab_content2" aria-labelledby="profile-tab">
+                                <!-- <div class="col-md-2 col-sm-12 col-xs-12">
+                                    <strong>Data Dasar:</strong>
+                                    <div class="x_title">
+                                            <h2 id="juduldaerah">Judul</h2>
+                                            <ul class="nav navbar-right panel_toolbox">
+                                            </ul>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                    <div id="listdatadasar" class="x_content">
+                                    </div> <strong>Variabel:</strong>
+                                    <div class="x_title">
+                                                <h2 id="juduldaerah">Judul</h2>
+                                                <ul class="nav navbar-right panel_toolbox">
+                                                </ul>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                    <div id="listvariabel" class="x_content">
+                                    </div>
+                                </div> -->
+                                <div class="col-md-6 col-sm-12 col-xs-12">
+                                    <!-- <div class="x_title">
+                                    <h2 id="juduldaerah">Judul</h2>
+                                    <ul class="nav navbar-right panel_toolbox">
+                                    </ul>
+                                    <div class="clearfix"></div>
+                                </div> -->
+                                    <div id="deskripsidaerah" class="x_content">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-sm-12 col-xs-12">
+                                    <!-- <div class="x_title">
+                                        <h2>Judul</h2>
+                                        <ul class="nav navbar-right panel_toolbox">
+                                        </ul>
+                                        <div class="clearfix"></div>
+                                    </div> -->
+                                    <div class="x_content">
+                                        <div id="tr1" class="table-responsive">
+                                            <table class="table table-striped jambo_table bulk_action span12">
+                                                <tbody>
+                                                    <tr>
+                                                        <td>Kode PUM
+                                                        </td>
+                                                        <td id="kodepum"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Kode BPS
+                                                        </td>
+                                                        <td id="kodebps"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Nama Desa</td>
+                                                        <td id="namadesa"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Nama Kecamatan</td>
+                                                        <td id="namakec"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Nama Kabupaten</td>
+                                                        <td id="namakab"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Nama Provinsi</td>
+                                                        <td id="namaprov"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Luas</td>
+                                                        <td id="luasan">-</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Dasar Hukum</td>
+                                                        <td id="dasarhukum">-</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <!-- <canvas id="chartradar" style="margin-top: 50px;"></canvas> -->
+                                            <div id="chart2" class="col-md-12 col-sm-12 col-xs-12"></div>
+                                            <div id="chart3" class="col-md-12 col-sm-12 col-xs-12"></div>
+                                            <div id="chart4" class="col-md-12 col-sm-12 col-xs-12"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="carimodal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div id="custom-search-input">
+
+                <ul id='hasilcari' class="list-group">
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- /page content -->
+<div id="userclass" style="display:none">{{session['kelas']}}</div>
+<div id="username" style="display:none">{{session['username']}}</div>
+<link href="{{ url_for('static', filename='css/profiler.css') }}" rel="stylesheet">
+<script src="{{ url_for('static', filename='vendors/d3js/d3.geo.tile.min.js') }}"></script>
+<script src="{{ url_for('static', filename='vendors/he/he.js') }}"></script>
+<script src="{{ url_for('static', filename='app/profiler2.js') }}"></script>
+<!-- <script src="{{ url_for('static', filename='vendors/d3js/d3-tile.v0.0.min.js') }}"></script> -->
+{% endblock %}

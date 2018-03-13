@@ -1,0 +1,99 @@
+{% extends "dashboard/base.htm" %} {% block content %}
+<div class="right_col" role="main">
+    <div class="title_left">
+        <h3>DATA DASAR BARU</h3>
+    </div>
+    <hr class="soft" />
+    <div class="col-md-12">
+        <!-- <h2>Kategori</h2> -->
+
+        <div class="row">
+            <div class="well col-md-12">
+                <h2>Data Dasar Baru</h2>
+                <hr class="soft" />
+
+                <form class="form-horizontal" action="" method="POST" name="datadasar" id="simpandatadasar">
+                    <fieldset>
+                        {{ form.hidden_tag() }}
+                        <p>{{ form.n_datadasar.label }} {{ form.n_datadasar(class_='form-control',size=32) }}<br>
+                            <p>{{ form.r_datadasar.label }} {{ form.r_datadasar(class_='form-control',size=128) }}<br>
+                            </p>
+                            <hr class="soft" />
+                            <div class="row">
+                                <a id="tambahparam" href="#" class="btn btn-info pull-right"><span class="glyphicon glyphicon-plus"></span> Kolom Baru</a>
+                            </div>
+                            <hr class="soft" />
+                            <div class="col" id="kolom">
+                                <ol>
+                                </ol>
+                            </div>
+                            <hr class="soft" />
+                            <p><input type="submit" class="btn btn-info" value="Buat Baru"></p>
+                    </fieldset>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('#n_datadasar').on('keypress', function(e) {
+            if (e.which == 32) {
+                return false;
+            }
+            if (e.which > 48 && e.which < 57) {
+                return false;
+            }
+        });
+        $('#n_datadasar').on('keyup', function(e) {
+            $('#n_datadasar').val($('#n_datadasar').val().toLowerCase());
+        });
+    });
+
+    $("#simpandatadasar").submit(function() {
+        console.log("SAVING");
+        formser = $("#simpandatadasar").serialize();
+        // alert(formser);
+        $.ajax({
+            url: "{{ url_for('datadasarhandler')}}",
+            data: formser,
+            type: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            success: function(response) {
+                console.log(response);
+                $.bootstrapGrowl("Tersimpan", {
+                    type: 'success'
+                });
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+        // $.post("{{ url_for('datadasarhandler')}}", formser, function(data) {
+        //     alert(data);
+        // });
+    });
+
+    $("#tambahparam").click(function() {
+        console.log("Tambah parameter");
+        // $("#kolom ol").append("<li>Nama Kolom <input name='namakolom' id='a' class='form-control' type='text'> Keterangan <input name='keterangan' id='b' class='form-control' type='text'> Tipe <select name='tipe' id='c' class='form-control'><option value='1'>Teks</option><option value='2'>Angka</option></select></li>");
+        $("#kolom ol").append("<li>Nama Kolom <input name='namakolom' id='a' class='form-control' type='text'> Keterangan <input name='keterangan' id='b' class='form-control' type='text'> Tipe <select name='tipe' id='c' class='form-control'><option value='2'>Angka</option></select></li>");
+        // $("input[name='namakolom']").on('keypress', function(e) {
+        //     if (e.which == 32) {
+        //         return false;
+        //     }
+        //     if (e.which > 48 && e.which < 57) {
+        //         return false;
+        //     }
+        // });
+        // $("input[name='namakolom']").on('keyup', function(e) {
+        //     $("input[name='namakolom']").val($("input[name='namakolom']").val().toLowerCase());
+        // });
+    });
+</script>
+{% endblock %}

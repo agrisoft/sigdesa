@@ -1,0 +1,702 @@
+{% extends "dashboard/base_isian.htm" %} {% block content %}
+<div class="right_col" role="main">
+    <!-- <div class="title_left">
+
+    </div> -->
+    <hr class="soft" />
+    <div class="x_panel">
+        <!-- <h2>Kategori</h2> -->
+        <div class="x_title">
+            <h2>ISI INDIKATOR</h2>
+            <div class="clearfix"></div>
+        </div>
+        <!-- <div class="col-lg-12">
+            <a id="simpanparam" href="#" class="btn btn-warning pull-right"><span class="glyphicon glyphicon-cloud-upload"></span> Unggah</a>
+            <a id="simpanparam" href="#" class="btn btn-success pull-right"><span class="glyphicon glyphicon-save-file"></span> Simpan</a>
+        </div> -->
+        <!-- <form class="form-inline navbar-search" method="get" action="/variabel">
+            <div class="input-group">
+                <input name="cari" id="srchFld" class="form-control" type="text" />
+                <div class="input-group-btn">
+                    <button type="submit" id="submitButton" class="btn btn-default">Cari</button>
+                </div>
+            </div>
+        </form> -->
+        <div class="x_content">
+            <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+                <div class="form-group">
+                    <label for="p_variabel" class="control-label col-md-1 col-sm-3 col-xs-12">Model</label>
+                    <div class="col-md-11 col-sm-9 col-xs-12">
+                        <select id="p_variabel" name="p_variabel" class="form-control">
+                            <option>--Pilih Model--</option>
+                            <option value="profildaerah">--Profil Daerah--</option>
+                            {%- for item in variabel %}
+                            <option value="{{item.n_variabel}}">{{item.r_variabel}}</option>
+                            {%- endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="p_provinsi" class="control-label col-md-1 col-sm-3 col-xs-12">Provinsi</label>
+                    <div class="col-md-11 col-sm-9 col-xs-12">
+                        <select id="p_provinsi" name="p_provinsi" class="form-control">
+                            {%- for item in provinsi %}
+                            <option value="{{item.username}}">{{item.provinsi}}</option>
+                            {%- endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="p_kabupaten" class="control-label col-md-1 col-sm-3 col-xs-12">Kabupaten</label>
+                    <div class="col-md-11 col-sm-9 col-xs-12">
+                        <select id="p_kabupaten" name="p_kabupaten" class="form-control">
+                            <option value="null">--Pilih Kabupaten--</option>
+                            {%- for item in kabupaten %}
+                            {% if item == '-' %}{% endif %}
+                            <option value="{{item.username}}">{{item.kabupaten}}</option>
+                            {%- endfor %} 
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="p_desa" class="control-label col-md-1 col-sm-3 col-xs-12">Desa</label>
+                    <div class="col-md-11 col-sm-9 col-xs-12">
+                        <select id="p_desa" name="p_desa" class="form-control">
+                            <option value="null">--Pilih Desa--</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="p_tahun" class="control-label col-md-1 col-sm-3 col-xs-12">Tahun</label>
+                    <div class="col-md-11 col-sm-9 col-xs-12">
+                        <select id="p_tahun" name="p_desa" class="form-control">
+                            <option value="2013">2013</option>
+                            <option value="2014">2014</option>
+                            <option value="2015">2015</option>
+                            <option value="2016">2016</option>
+                            <option value="2017" selected>2017</option>
+                            <option value="">2018</option>
+                        </select>
+                    </div>
+                </div>
+            </form>
+            <hr class="soft" />
+            <div id="param_ex" class="col-md-6 col-sm-6 col-xs-12 btn-group pull-left" style="padding: 0;">
+                <a id="impordata" href="#" class="col-md-3 col-xs-4 btn btn-warning"><span class="glyphicon glyphicon-floppy-open"></span> Impor Data</a>
+                <a id="eksportmpl" href="#" class="col-md-5 col-xs-5 btn btn-warning" id="ex_template"><span class="glyphicon glyphicon-floppy-open"></span> Ekspor Template</a>
+                <a id="simpanparam" href="#" class="col-md-3 col-xs-3 btn btn-success"><span class="glyphicon glyphicon-save-file"></span> Simpan</a>
+            </div>
+            <br><br><br>
+            <form id="isian">
+                <div id="isivariabel" class="underlined">
+                    <ol id="olisivariabel" class="list-group"></ol>
+                </div>
+                <div id="profile" class="col"></div>
+                <div id="summernote" class="summernote"></div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<!-- <link href="{{ url_for('static', filename='vendors/froala/css/froala_editor.pkgd.min.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ url_for('static', filename='vendors/froala/css/froala_style.min.css') }}" rel="stylesheet" type="text/css" /> -->
+<!-- <script type="text/javascript" src="{{ url_for('static', filename='vendors/froala/js/froala_editor.pkgd.min.js') }}"></script> -->
+
+<div id="userclass" style="display:none">{{session['kelas']}}</div>
+<div id="username" style="display:none">{{session['username']}}</div>
+<link href="{{ url_for('static', filename='vendors/summernote/summernote.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ url_for('static', filename='app/fine-uploader.css') }}" rel="stylesheet" type="text/css" />
+<!-- <link href="{{ url_for('static', filename='vendors/jquery-ui/jquery-ui.min.css') }}" rel="stylesheet"> -->
+<script type="text/javascript" src="{{ url_for('static', filename='vendors/summernote/summernote.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='app/download.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='app/fine-uploader.js') }}"></script>
+
+<script>
+    $(function() {
+        $.widget("custom.combobox", {
+            _create: function() {
+                this.wrapper = $("<span>")
+                    .addClass("custom-combobox")
+                    .insertAfter(this.element);
+
+                this.element.hide();
+                this._createAutocomplete();
+                this._createShowAllButton();
+            },
+
+            _createAutocomplete: function() {
+                var selected = this.element.children(":selected"),
+                    value = selected.val() ? selected.text() : "";
+
+                this.input = $("<input>")
+                    .appendTo(this.wrapper)
+                    .val(value)
+                    .attr("title", "")
+                    .addClass("custom-combobox-input ui-widget ui-widget-content ui-state-default ui-corner-left")
+                    .autocomplete({
+                        delay: 0,
+                        minLength: 0,
+                        source: $.proxy(this, "_source")
+                    })
+                    .tooltip({
+                        classes: {
+                            "ui-tooltip": "ui-state-highlight"
+                        }
+                    });
+
+                this._on(this.input, {
+                    autocompleteselect: function(event, ui) {
+                        ui.item.option.selected = true;
+                        this._trigger("select", event, {
+                            item: ui.item.option
+                        });
+                    },
+
+                    autocompletechange: "_removeIfInvalid"
+                });
+            },
+
+            _createShowAllButton: function() {
+                var input = this.input,
+                    wasOpen = false;
+
+                $("<a>")
+                    .attr("tabIndex", -1)
+                    .attr("title", "Show All Items")
+                    .tooltip()
+                    .appendTo(this.wrapper)
+                    .button({
+                        icons: {
+                            primary: "ui-icon-triangle-1-s"
+                        },
+                        text: false
+                    })
+                    .removeClass("ui-corner-all")
+                    .addClass("custom-combobox-toggle ui-corner-right")
+                    .on("mousedown", function() {
+                        wasOpen = input.autocomplete("widget").is(":visible");
+                    })
+                    .on("click", function() {
+                        input.trigger("focus");
+
+                        // Close if already visible
+                        if (wasOpen) {
+                            return;
+                        }
+
+                        // Pass empty string as value to search for, displaying all results
+                        input.autocomplete("search", "");
+                    });
+            },
+
+            _source: function(request, response) {
+                var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
+                response(this.element.children("option").map(function() {
+                    var text = $(this).text();
+                    if (this.value && (!request.term || matcher.test(text)))
+                        return {
+                            label: text,
+                            value: text,
+                            option: this
+                        };
+                }));
+            },
+
+            _removeIfInvalid: function(event, ui) {
+
+                // Selected an item, nothing to do
+                if (ui.item) {
+                    return;
+                }
+
+                // Search for a match (case-insensitive)
+                var value = this.input.val(),
+                    valueLowerCase = value.toLowerCase(),
+                    valid = false;
+                this.element.children("option").each(function() {
+                    if ($(this).text().toLowerCase() === valueLowerCase) {
+                        this.selected = valid = true;
+                        return false;
+                    }
+                });
+
+                // Found a match, nothing to do
+                if (valid) {
+                    return;
+                }
+
+                // Remove invalid value
+                this.input
+                    .val("")
+                    .attr("title", value + " didn't match any item")
+                    .tooltip("open");
+                this.element.val("");
+                this._delay(function() {
+                    this.input.tooltip("close").attr("title", "");
+                }, 2500);
+                this.input.autocomplete("instance").term = "";
+            },
+
+            _destroy: function() {
+                this.wrapper.remove();
+                this.element.show();
+            }
+        });
+
+        // $("#combobox").combobox();
+        // $("#toggle").on("click", function() {
+        //     $("#combobox").toggle();
+        // });
+    });
+
+    function makefileid() {
+        var text = "";
+        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+        for (var i = 0; i < 5; i++)
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+        return text;
+    }
+
+    $(document).ready(function() {
+        $("#param_ex").hide();
+        username = $("#username").text();
+        kelas = $("#userclass").text();
+        if (kelas == 'provinsi') {
+            $("#impordata").show();
+            $("#eksportmpl").show();
+            $("#p_provinsi").prop("disabled", false);
+            $("#p_kabupaten").prop("disabled", false);
+            $("#p_desa").prop("disabled", false);
+        } else if (kelas == 'kabupaten') {
+            $("#impordata").show();
+            $("#eksportmpl").show();
+            $("#p_provinsi").prop("disabled", true);
+            $("#p_kabupaten").prop("disabled", true);
+            $("#p_desa").prop("disabled", false);
+            $("#p_kabupaten").val(username);
+        } else if (kelas == 'desa') {
+            $("#impordata").hide();
+            $("#eksportmpl").hide();
+            kkab = username.substring(0, 4);
+            $("#p_provinsi").prop("disabled", true);
+            $("#p_kabupaten").prop("disabled", true);
+            $("#p_desa").prop("disabled", true);
+            $("#p_kabupaten").val(kkab);
+            $("#p_desa").val(username);
+        }
+        selection = $("#p_kabupaten").val();
+        console.log(selection);
+        if (selection != 'null') {
+            $.get('/getdesainkab?kode=' + String(selection),
+                function(data) {
+                    console.log(data)
+                    for (i = 0; i < data.length; i++) {
+                        if (data[i]['desa'] != '-') {
+                            $("#p_desa").append("<option value='" + data[i]['kode'] + "'>" + data[i]['desa'] + "</option>")
+                        }
+                    }
+                    username = $("#username").text();
+                    kelas = $("#userclass").text();
+                    if (kelas == 'provinsi') {
+                        $("#p_provinsi").prop("disabled", false);
+                        $("#p_kabupaten").prop("disabled", false);
+                        $("#p_desa").prop("disabled", false);
+                    } else if (kelas == 'kabupaten') {
+                        $("#p_provinsi").prop("disabled", true);
+                        $("#p_kabupaten").prop("disabled", true);
+                        $("#p_desa").prop("disabled", false);
+                        $("#p_kabupaten").val(username);
+                    } else if (kelas == 'desa') {
+                        kkab = username.substring(0, 4);
+                        $("#p_provinsi").prop("disabled", true);
+                        $("#p_kabupaten").prop("disabled", true);
+                        $("#p_desa").prop("disabled", true);
+                        $("#p_kabupaten").val(kkab);
+                        console.log(kkab);
+                        $("#p_desa").val(username);
+                    }
+                })
+        }
+    });
+
+    $("#ex_template").click(function() {
+        console.log("SAVING");
+        selection = $("#p_variabel").val();
+        // formser = $("#simpandatadasar").serialize();
+        // alert(formser);
+        $.ajax({
+            url: "{{ url_for('simpantemplateisian')}}?tabel=" + selection,
+            // data: formser,
+            type: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            success: function(response) {
+                console.log(response);
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+        // $.post("{{ url_for('datadasarhandler')}}", formser, function(data) {
+        //     alert(data);
+        // });
+    });
+
+
+    var tipemodel, tabel;
+
+    $("#p_variabel").change(function() {
+        $("#param_ex").show();
+        $('#olisivariabel').empty();
+        selection = $("#p_variabel").val();
+        if (selection == 'profildaerah') {
+            $("#profile").empty();
+            // $("#profile").append('<textarea id="editorisi"></textarea>');
+            $("#summernote").summernote();
+            tahun = $("#p_tahun").val();
+            tabel = $("#p_variabel").val();
+            window.tabel = $("#p_variabel").val();
+            kode = $("#p_desa").val();
+            mode = $("#p_variabel").val();
+            desakode = $("#p_desa").val();
+            provkode = $("#p_provinsi").val();
+            kabkode = $("#p_kabupaten").val();
+            var profilteks;
+            if (provkode != 'null' && kabkode != 'null') {
+                kode = kabkode;
+            }
+            if (provkode != 'null' && kabkode != 'null' && desakode != 'null') {
+                kode = $("#p_desa").val();
+            }
+            if (kabkode == 'null' && desakode == 'null') {
+                kode = provkode;
+            }
+            if (mode == 'profildaerah') {
+                $.get('/profildaerah?kode=' + kode,
+                    function(data) {
+                        profilteks = data;
+                        console.log(profilteks)
+                        if (kabkode == 'null' && desakode == 'null') {
+                            $("#summernote").summernote('code', data[0].deskripsi);
+                        }
+                    });
+            }
+        } else {
+            $('#summernote').summernote('destroy');
+            $.get("/variabel/detail/" + String(selection),
+                function(data) {
+                    tipe = data['tipe'];
+                    window.tipemodel = tipe;
+                    window.variabeldesc = data;
+                    if (tipe == 1) {
+                        $.each(variabeldesc, function(i, val) {
+                            if (String(i) != 'tipe') {
+                                $("#isivariabel ol").append('<li class="list-groups-item"><div id="varparam" class="form-group question" style="padding-top: 1px;"><label class="col-md-12 col-sm-12 col-xs-12 question-li" for="focusedInput">' + val + '</label><div class="radio"><label><input type="radio" name="' + i + '" id="optionsRadios1" value="1">Ya</label></div><div class="radio"><label><input type="radio" name="' + i + '" id="optionsRadios2" value="0">Tidak</label></div></div></li>');
+                            }
+                        })
+                    };
+                    if (tipe == 2) {
+                        $.each(variabeldesc, function(i, val) {
+                            if (String(i) != 'tipe' && String(i) == 'pertanyaan') {
+                                console.log(val)
+                                pertanyaan = JSON.parse(val);
+                                jmlpertanyaan = Object.keys(pertanyaan).length;
+                                for (i = 0; i < jmlpertanyaan; i++) {
+                                    console.log(pertanyaan[i + 1])
+                                    jmlsub = Object.keys(pertanyaan[i + 1]).length;
+                                    $("#isivariabel ol").append('<li><div id="pilganda_' + String(i + 1) + '" "class="form-group skoringli"><label class="control-label" for="focusedInput">' + pertanyaan[i + 1][1] + '</label></div></li>');
+                                    // if ((i + 1) > 1) {
+                                    k = 2;
+                                    console.log('SUB', jmlsub)
+                                    for (j = 1; j < jmlsub; j++) {
+                                        console.log('JB', pertanyaan[i + 1][k])
+                                        $("#pilganda_" + String(i + 1)).append("<br><input type='radio' name='pilgan_" + String(i + 1) + "' value='" + String(j) + "'>" + pertanyaan[i + 1][k]);
+                                        k++;
+                                    }
+                                    // }
+                                }
+                            }
+                        })
+                    };
+                    if (tipe == 3) {
+                        $('#summernote').summernote('destroy');
+                        $("#isivariabel ol").append('Tipe Formula, dihitung otomatis');
+                    }
+                    if (tipe == 4) {
+                        $("#profile").empty();
+                        $("#summernote").summernote();
+                        tahun = $("#p_tahun").val();
+                        tabel = $("#p_variabel").val();
+                        kode = $("#p_desa").val();
+                        $.get("/htmlprofile?tabel=" + tabel + "&tahun=" + tahun + "&kode=" + kode,
+                            function(data) {
+                                $("#summernote").summernote('code', data);
+                            })
+                    }
+                    if (tipe == 5) {
+                        $('#summernote').summernote('destroy');
+                        // $("#isivariabel ol").append('Sebentar');
+                        $.each(variabeldesc, function(i, val) {
+                            if (String(i) != 'tipe' && String(i) == 'pertanyaan') {
+                                pertanyaan = JSON.parse(val);
+                                console.log(pertanyaan)
+                                jmlkat = Object.keys(pertanyaan).length;
+                                jmlpertanyaan = Object.keys(pertanyaan[1]).length;
+                                for (i = 0; i < jmlkat; i++) {
+                                    console.log(pertanyaan[i + 1]);
+                                    $("#olisivariabel").append('<li><div id="custkat_' + String(i + 1) + '" "class="form-group skoringli"><label class="control-label" for="focusedInput">' + pertanyaan[i + 1]['kategori'] + '</label></div><ol id="subcuskat_' + String(i + 1) + '"></ol></div></li>');
+                                    jmlper = Object.keys(pertanyaan[i + 1]).length - 1;
+                                    for (j = 0; j < jmlper; j++) {
+                                        $("#subcuskat_" + String(i + 1)).append("<li><label class='control-label' for='subkat_" + String(i + 1) + "_" + String(j + 1) + "'>" + pertanyaan[i + 1][j + 1]['pertanyaan'] + "</label><ol id='subcuskatq_" + String(i + 1) + "_" + String(j + 1) + "'></ol></li>")
+                                        jmljaw = Object.keys(pertanyaan[i + 1][j + 1]).length - 1;
+                                        for (k = 0; k < jmljaw; k++) {
+                                            console.log(pertanyaan[i + 1][j + 1][k]);
+                                            try {
+                                                valjaw = pertanyaan[i + 1][j + 1][k + 1]['jawaban'];
+                                                valsko = pertanyaan[i + 1][j + 1][k + 1]['skor'];
+                                            } catch (error) {
+                                                valjaw = '';
+                                                valsko = '';
+                                            }
+                                            $("#subcuskatq_" + String(i + 1) + "_" + String(j + 1)).append("<li><input type='radio' id='k" + String(i + 1) + "_" + String(j + 1) + "' name='k" + String(i + 1) + "_" + String(j + 1) + "' value='" + valsko + "'>" + valjaw + "</li>")
+                                        }
+                                    }
+                                }
+                            }
+                        })
+                    }
+                });
+        }
+
+    })
+
+    $("#p_kabupaten").change(function() {
+        mode = $("#p_variabel").val();
+        desakode = $("#p_desa").val();
+        provkode = $("#p_provinsi").val();
+        kabkode = $("#p_kabupaten").val();
+        var profilteks;
+        if (provkode != 'null' && kabkode != 'null') {
+            kode = kabkode;
+        }
+        if (provkode != 'null' && kabkode != 'null' && desakode != 'null') {
+            kode = $("#p_desa").val();
+        }
+        if (kabkode == 'null' && desakode == 'null') {
+            kode = provkode;
+        }
+        if (mode == 'profildaerah') {
+            $.get('/profildaerah?kode=' + kode,
+                function(data) {
+                    profilteks = data;
+                    console.log(profilteks)
+                    if (kabkode != 'null' && desakode == 'null') {
+                        $("#summernote").summernote('code', data[0].deskripsi);
+                    }
+                    if (kabkode == 'null' && desakode == 'null') {
+                        $("#summernote").summernote('code', data[0].deskripsi);
+                    }
+                });
+        }
+        $("#p_desa").empty();
+        selection = $("#p_kabupaten").val();
+        console.log(selection);
+        if (selection != 'null') {
+            $.get('/getdesainkab?kode=' + String(selection),
+                function(data) {
+                    console.log(data)
+                    $("#p_desa").append("<option value='null'>--Pilih Desa--</option>")
+                    for (i = 0; i < data.length; i++) {
+                        if (data[i]['desa'] != '-') {
+                            $("#p_desa").append("<option value='" + data[i]['kode'] + "'>" + data[i]['desa'] + "</option>")
+                        }
+                    }
+                    username = $("#username").text();
+                    kelas = $("#userclass").text();
+                    if (kelas == 'provinsi') {
+                        $("#p_provinsi").prop("disabled", false);
+                        $("#p_kabupaten").prop("disabled", false);
+                        $("#p_desa").prop("disabled", false);
+                    } else if (kelas == 'kabupaten') {
+                        $("#p_provinsi").prop("disabled", true);
+                        $("#p_kabupaten").prop("disabled", true);
+                        $("#p_desa").prop("disabled", false);
+                        $("#p_kabupaten").val(username);
+                    } else if (kelas == 'desa') {
+                        kkab = username.substring(0, 4);
+                        $("#p_provinsi").prop("disabled", true);
+                        $("#p_kabupaten").prop("disabled", true);
+                        $("#p_desa").prop("disabled", true);
+                        $("#p_kabupaten").val(kkab);
+                        console.log(kkab);
+                        $("#p_desa").val(username);
+                    }
+                });
+        } else {
+            $("#p_desa").append("<option value='null'>--Pilih Desa--</option>")
+        }
+    })
+
+    $("#p_desa").change(function() {
+        mode = $("#p_variabel").val();
+        desakode = $("#p_desa").val();
+        provkode = $("#p_provinsi").val();
+        kabkode = $("#p_kabupaten").val();
+        var profilteks;
+        if (provkode != 'null' && kabkode != 'null') {
+            kode = kabkode;
+        }
+        if (provkode != 'null' && kabkode != 'null' && desakode != 'null') {
+            kode = $("#p_desa").val();
+        }
+        if (kabkode == 'null' && desakode == 'null') {
+            kode = provkode;
+        }
+        if (mode == 'profildaerah') {
+            $.get('/profildaerah?kode=' + kode,
+                function(data) {
+                    profilteks = data;
+                    console.log(profilteks)
+                    if (kabkode != 'null' && desakode != 'null') {
+                        $("#summernote").summernote('code', data[0].deskripsi);
+                    }
+                    if (kabkode == 'null' && desakode == 'null') {
+                        $("#summernote").summernote('code', data[0].deskripsi);
+                    }
+                    if (kabkode != 'null' && desakode == 'null') {
+                        $("#summernote").summernote('code', data[0].deskripsi);
+                    }
+                });
+        }
+        console.log(tipemodel);
+        tahun = $("#p_tahun").val();
+        tabel = $("#p_variabel").val();
+        kode = $("#p_desa").val();
+        if (tipemodel == 4) {
+            $.get("/htmlprofile?tabel=" + tabel + "&tahun=" + tahun + "&kode=" + kode,
+                function(data) {
+                    // $('#editorisi').froalaEditor('html.set', data);
+                    $("#summernote").summernote('code', data);
+                })
+        }
+    })
+
+
+    var htmldata;
+
+    $("#eksportmpl").click(function() {
+        tabel = $("#p_variabel").val();
+        window.open("{{ url_for('eksportmpl')}}?tabel=" + tabel + "&tipe=" + String(tipemodel), '_blank');
+    });
+
+    $("#impordata").click(function() {
+        tabel = $("#p_variabel").val();
+        var xlsxUploader = new qq.FineUploaderBasic({
+            button: document.getElementById("impordata"),
+            autoUpload: true,
+            multiple: false,
+            request: {
+                endpoint: '/impordata?tipe=' + String(tipemodel) + '&tabel=' + tabel
+            },
+            validation: {
+                allowedExtensions: ['xlsx', 'XLSX']
+            },
+            callbacks: {
+                onComplete: function(id, fileName, responseJSON) {
+                    if (responseJSON.success) {
+                        $.bootstrapGrowl("Tersimpan", {
+                            type: 'success'
+                        });
+                    }
+                }
+            }
+        });
+    })
+
+    $("#simpanparam").click(function() {
+        selection = $("#p_desa").val();
+        formser = $("#isian").serialize();
+        tahun = $("#p_tahun").val();
+        tabel = $("#p_variabel").val();
+        kode = $("#p_desa").val();
+        desakode = $("#p_desa").val();
+        provkode = $("#p_provinsi").val();
+        kabkode = $("#p_kabupaten").val();
+        console.log('SAVE', selection, tahun);
+        console.log(formser);
+        if (tabel == 'profildaerah') {
+            if (provkode != 'null' && kabkode != 'null') {
+                kode = kabkode;
+            }
+            if (provkode != 'null' && kabkode != 'null' && desakode != 'null') {
+                kode = $("#p_desa").val();
+            }
+            if (kabkode == 'null' && desakode == 'null') {
+                kode = provkode;
+            }
+
+            htmldata = $("#summernote").summernote('code');
+            $.ajax({
+                url: "{{ url_for('simpanprofildaerah')}}?tahun=" + tahun + "&kode=" + kode,
+                data: {
+                    htmldata: htmldata
+                },
+                type: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                success: function(response) {
+                    console.log(response);
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        } else {
+            if (tipemodel == 4) {
+                // htmldata = $('#editorisi').froalaEditor('html.get');
+                htmldata = $("#summernote").summernote('code');
+                $.ajax({
+                    url: "{{ url_for('simpanindikator')}}?tahun=" + tahun + "&tabel=" + tabel + "&kode=" + kode + "&model=" + tipemodel,
+                    data: {
+                        htmldata: htmldata
+                    },
+                    type: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    success: function(response) {
+                        console.log(response);
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            } else {
+                $.ajax({
+                    url: "{{ url_for('simpanindikator')}}?tahun=" + tahun + "&tabel=" + tabel + "&kode=" + kode + "&model=" + tipemodel,
+                    data: formser,
+                    type: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    success: function(response) {
+                        console.log(response);
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            }
+        }
+        $.bootstrapGrowl("Tersimpan", {
+            type: 'success'
+        });
+    })
+</script>
+
+{% endblock %}

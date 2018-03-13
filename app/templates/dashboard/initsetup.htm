@@ -1,0 +1,44 @@
+{% extends "dashboard/base.htm" %} {% block content %}
+<div class="right_col" role="main">
+    <div class="title_left">
+        <h3>SETUP AWAL</h3>
+    </div>
+    <hr class="soft" />
+    <div class="col-md-12">
+        <!-- <h2>Kategori</h2> -->
+
+        <div class="row">
+            <div class="well col-md-12">
+                <h2>Setup Awal Aplikasi</h2>
+                <hr class="soft" />
+                <form class="form-horizontal" action="" method="POST" name="variabel" enctype="multipart/form-data">
+                    <fieldset>
+                        <div class="form-group">
+                            <label for="admin_desa_shape">Berkas ZIP berisikan SHAPEFILE daerah (DESA - Polygon) dengan skema KUGI (4)</label>
+                            <div><input class='form-control' type="file" name="admin_desa_shape" id="admin_desa_shape" value=""></div>
+                            <p></p>
+                            <label for="admin_kab_shape">Berkas ZIP berisikan SHAPEFILE daerah (KABUPATEN - Polygon) dengan skema KUGI (4)</label>
+                            <div><input class='form-control' type="file" name="admin_kab_shape" id="admin_kab_shape" value=""></div>
+                        </div>
+                        <p></p>
+                        <p><input id="smb" type="submit" class="btn btn-info" value="Simpan"></p>
+                    </fieldset>
+                </form>
+                {% with messages = get_flashed_messages() %} {% if messages %}
+                <div class="alert alert-dismissible alert-info">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button> {% for message in messages %}
+                    <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+                {% endif %} {% endwith %}
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+
+<script>
+</script>
+
+{% endblock %}

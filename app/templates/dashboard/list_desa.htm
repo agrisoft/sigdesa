@@ -1,0 +1,80 @@
+{% extends "dashboard/base.htm" %} {% block content %}
+<div class="right_col" role="main">
+    <!-- <div class="title_left">
+    </div> -->
+    <hr class="soft" />
+    <div class="x_panel">
+        <div class="x_title">
+            <h2>DAFTAR DESA</h2>
+            <div class="clearfix"></div>
+        </div>
+        <!-- <h2>Kategori</h2> -->
+
+        {{pagination.info}}
+        <div class="row">
+            <!-- <a href="{{ url_for('daftar_desa') }}" class="btn btn-info pull-right" style="margin-right:25px;"><span class="glyphicon glyphicon-plus"></span> Kategori Baru</a> -->
+        </div>
+        <!-- <hr class="soft" /> -->
+        <div class="nav-table" style="margin-top: 10px;">
+            <div class="title_left">
+                <div class="col-md-8 col-sm-4 col-xs-12" style="padding:0;">
+                    <div class="form-group">
+                        <label class="control-label col-md-1 col-sm-3 col-xs-12 label-control">Show</label>
+                        <div class="control-label col-md-2 col-sm-3 col-xs-12">
+                            <select class="select2_single form-control col-md-" tabindex="-1">
+                                <option value="10">10</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                        </div>
+                        <label class="control-label col-md-1 col-sm-3 col-xs-12 label-control">Enteries</label>
+                    </div>
+                </div>
+            </div>
+            <div class="title_right">
+                <div class="col-md-4 col-sm-4 col-xs-12 form-group pull-right top_search" style="margin:0;">
+                    <form class="navbar-search" method="get" action="/daftar_desa">
+                        <div class="input-group">
+                            <input name="cari" id="srchFld" class="form-control" type="text" />
+                            <div class="input-group-btn">
+                                <button type="submit" id="submitButton" class="btn btn-default">Cari</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <table class="col-md-12 col-sm-12 col-sx-12 table-responsive table table-striped jambo_table bulk_action">
+            <thead>
+                <tr>
+                    <th>Kode BPS</th>
+                    <th>Kode PUM</th>
+                    <th>Nama Desa/Kelurahan</th>
+                    <th>Kabupaten</th>
+                    <th style="width:170px;">Reset/Ganti Password </th>
+                </tr>
+            </thead>
+            <tr>
+                {%- for item in desa %}{% if session['username'] == item.username[:(session['username']|length)] or session['username'] == 'administrator' %}
+                <tr>
+                    <td>{{ item.username }}</td>
+                    <td>{{ item.kodepum }} </td>
+                    <td>{{ item.desa }}</td>
+                    <td>{{ item.kabupaten }} </td>
+                    <td>
+                        <div class="btn-group btn-group-justified">
+                            <!-- <a href="{{ url_for('daftar_desa')}}{{ item.id }}" class="btn btn-info" role="button"><span class="glyphicon glyphicon-list"></span></a> -->
+                            <a href="/resetpassword?kode={{ item.username }}" class="btn btn-warning"><span class="glyphicon glyphicon-edit"></span></a>
+                            <!-- <a href="{{ url_for('daftar_desa') }}{{ item.id }}" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></a> -->
+                        </div>
+                    </td>
+                </tr>
+                {% endif %}{%- endfor %}
+            </tr>
+        </table>
+        <div class="row" style="display:table-row;">
+            {{pagination.links}}
+        </div>
+    </div>
+</div>
+{% endblock %}

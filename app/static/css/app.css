@@ -1,0 +1,52 @@
+#varparam {
+    padding-top: 30px;
+}
+
+#operand {
+    padding-bottom: 25px;
+}
+
+#listvariabel {
+    padding-bottom: 25px;
+}
+
+#listsubvariabel {
+    padding-bottom: 25px;
+    height: auto;
+}
+
+div.tooltip {
+    position: absolute;
+    text-align: center;
+    /* width: 120px;
+    height: 32px; */
+    padding: 2px;
+    font: 18px sans-serif;
+    background: gray;
+    border: 0px;
+    border-radius: 8px;
+    pointer-events: none;
+}
+
+.custom-combobox {
+    position: relative;
+    display: inline-block;
+}
+
+.custom-combobox-toggle {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin-left: -1px;
+    padding: 0;
+    width: 32px;
+    /* height: 48px; */
+    background: lightgray;
+    border: gray;
+    outline: 1px;
+}
+
+.custom-combobox-input {
+    margin: 0;
+    padding: 5px 10px;
+}

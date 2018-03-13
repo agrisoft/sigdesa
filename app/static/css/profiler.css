@@ -1,0 +1,224 @@
+/* path {
+    fill: lightgray;
+    fill-opacity: .2;
+    stroke: #fff;
+    stroke-width: 0.025 px;
+} */
+
+.g_main {
+    cursor: pointer;
+    pointer-events: all;
+}
+
+.background {
+    fill: #EBF4F7;
+    /* fill: none; */
+    /* pointer-events: all; */
+}
+
+#d3map {
+    height: 95vh;
+    width: 100%;
+    /* pointer-events: all; */
+}
+
+#kabupaten {
+    fill: #82A183;
+    stroke: #3B533D;
+    stroke-width: 0.5px;
+    stroke-dasharray: 2, 2;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+    pointer-events: all;
+}
+
+.kdebps {
+    stroke: rgb(16, 70, 58);
+    fill: rgb(154, 204, 146);
+    stroke-width: 0.05px;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+}
+
+#kabupaten .active {
+    fill: orange;
+}
+
+#batas-kabupaten {
+    fill: none;
+    stroke: #3B533D;
+    stroke-width: 0.5px;
+    stroke-dasharray: 2, 2;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+    pointer-events: none;
+}
+
+.sekitaran {
+    fill: #CFE7DA;
+    stroke: #3B533D;
+    stroke-width: 0.5px;
+    stroke-dasharray: 2, 2;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+    pointer-events: none;
+}
+
+.desa-label {
+    fill: #0B321F;
+    fill-opacity: .5;
+    font-family: "Arial", Serif, sans-serif;
+    font-size: 0.4px;
+    font-weight: 500;
+    text-align: center;
+    -webkit-user-select: none;
+    /* -moz-user-select: none; */
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.kabupaten-label {
+    fill: #0B321F;
+    fill-opacity: .5;
+    font-family: "Arial", Serif, sans-serif;
+    font-size: 7px;
+    font-weight: 500;
+    text-align: right;
+    -webkit-user-select: none;
+    /* -moz-user-select: none; */
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.provinsi-label {
+    fill: #0B321F;
+    fill-opacity: .5;
+    font-size: 7px;
+    font-weight: 300;
+    text-anchor: right;
+    -webkit-user-select: none;
+    /* -moz-user-select: none; */
+    -ms-user-select: none;
+    user-select: none;
+}
+
+
+/* #gentooltip {
+    position: absolute;
+    text-align: center;
+    padding: 2px;
+    font: 12px sans-serif;
+    background: lightsteelblue;
+    border: 0px;
+    border-radius: 8px;
+    pointer-events: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+} */
+
+#gentooltip {
+    position: absolute;
+    text-align: center;
+    /* width: 60px; */
+    /* height: 28px; */
+    padding: 2px;
+    font-size: medium;
+    font-weight: bold;
+    /* font: 12px sans-serif; */
+    background: #fff0ca;
+    border: 0px;
+    border-radius: 8px;
+    pointer-events: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.legend {
+    font-size: 12px;
+}
+
+#chartradar {
+    height: 350px;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+
+#tr1 {
+    overflow: hidden;
+}
+
+
+/* .d3container {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+vertical-align: top;
+overflow: hidden;
+
+}
+*/
+
+.svg-content {
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+
+/* .svg-container {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%;
+
+vertical-align: top;
+overflow: hidden;
+
+}
+.svg-content-responsive {
+    display: inline-block;
+    position: absolute;
+    top: 10px;
+    left: 0;
+}
+*/
+
+path:hover {
+    fill: lightgoldenrodyellow;
+    /* stroke: red;
+    stroke-width: 0.5px; */
+    fill-opacity: .7;
+}
+
+.map {
+    position: relative;
+    overflow: hidden;
+}
+
+.layer {
+    position: absolute;
+}
+
+.tile {
+    pointer-events: none;
+    position: absolute;
+    width: 256px;
+    height: 256px;
+}
+
+.info {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+}
+
+.overlay {
+    fill: none;
+    pointer-events: all;
+}

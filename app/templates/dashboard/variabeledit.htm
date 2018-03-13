@@ -1,0 +1,48 @@
+{% extends "dashboard/base.htm" %} {% block content %}
+<div class="right_col" role="main">
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>Edit Model
+                        <!-- <small>Variabel {{variabel.n_variabel}}</small> -->
+                    </h2>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <form class="form-horizontal" action="" method="POST" name="variabel">
+                        <fieldset>
+                            {{ form.hidden_tag() }}
+                            <div>
+                                <p>{{ form.r_variabel.label }} {{ form.r_variabel(class_='form-control',size=128, value=variabel.r_variabel) }}<br>
+                                </p>
+                                <strong>Deskripsi</strong>
+                                <p>
+                                    <div><input type="text" name="deskripsi" id="summernote" value="{{variabel.deskripsi}}"></div>
+                                </p>
+
+                                <hr class="soft" />
+                                <p><input id="smb" type="submit" class="btn btn-info" value="Edit"></p>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<link href="{{ url_for('static', filename='vendors/summernote/summernote.css') }}" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="{{ url_for('static', filename='vendors/summernote/summernote.js') }}"></script>
+
+<script>
+    $("#summernote").summernote();
+
+    $(document).ready(function() {
+        $("#summernote").summernote('code', $("#summernote").val());
+    });
+
+    $('#smb').click(function() {
+        $("#summernote").val($("#summernote").summernote('code'));
+    })
+</script>
+{% endblock %}

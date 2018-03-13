@@ -1,0 +1,66 @@
+{% extends "dashboard/base.htm" %} {% block content %}
+<div class="right_col" role="main">
+    <!-- <div class="title_left">
+
+    </div> -->
+    <hr class="soft" />
+    <div class="x_panel">
+        <!-- <h2>Kategori</h2> -->
+        <div class="x_title">
+            <h2>DAFTAR MODEL</h2>
+            <div class="clearfix"></div>
+        </div>
+
+        {{pagination.info}} {{pagination.links}}
+        <div class="nav-table" style="margin-top: 1%;">
+            <div class="title_left">
+                <div class="col-md-2 col-sm-2 col-xs-12" style="padding:0;">
+                    <a href="{{ url_for('variabelbaru') }}" style="margin-right:25px;">
+                        <button class="btn btn-success btn-sm" style="width:100%;"><i class="fa fa-plus" style="padding-right: 5%;"></i>Model Baru</button>
+                    </a>
+                </div>
+            </div>
+            <div class="title_right">
+                <div class="col-md-4 col-sm-4 col-xs-12 form-group pull-right top_search" style="margin:0;">
+                    <form class="navbar-search" method="get" action="/variabel">
+                        <div class="input-group">
+                            <input name="cari" id="srchFld" class="form-control" type="text" />
+                            <div class="input-group-btn">
+                                <button type="submit" id="submitButton" class="btn btn-default">Cari</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <table class="col-md-12 col-sm-12 col-sx-12 table-responsive table table-striped jambo_table bulk_action">
+            <thead>
+                <tr>
+                    <th>Nama Tabel</th>
+                    <th>Nama Model</th>
+                    <th style="width:170px;">Aksi</th>
+                </tr>
+            </thead>
+            <tr>
+                <!-- <th>#</th> -->
+                {%- for item in variabel %}
+                <tr>
+                    <td>{{ item.n_variabel }}</td>
+                    <td>{{ item.r_variabel }}</td>
+                    <!-- <td>{{ item.kabupaten }} </td> -->
+                    <td>
+                        <div class="btn-group btn-group-justified">
+                            <a href="{{ url_for('variabel')}}/{{ item.id }}" class="btn btn-info" role="button"><span class="glyphicon glyphicon-list"></span></a>
+                            <a href="{{ url_for('variabeledit_dum') }}{{ item.n_variabel }}" class="btn btn-warning"><span class="glyphicon glyphicon-edit"></span></a>
+                            <a href="{{ url_for('variabeldelete_dum') }}{{ item.n_variabel }}" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></a>
+                        </div>
+                    </td>
+                </tr>
+                {%- endfor %}
+            </tr>
+        </table>
+
+    </div>
+    {{pagination.links}}
+</div>
+{% endblock %}
