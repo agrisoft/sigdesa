@@ -42,7 +42,7 @@ from .forms import DatadasarForm, LoginForm, VariabelForm
 from .models import (t_datadasar, t_kategori, t_kategoribreak,
                      t_kategoribreakSchema, t_user, t_userSchema,t_variabel, t_config)
 
-from config import APP_ROOT, PG_DB, PG_PASSWORD, PG_USER, config.PREFIX
+from config import APP_ROOT, PG_DB, PG_PASSWORD, PG_USER, PREFIX
 
 
 # engine open
