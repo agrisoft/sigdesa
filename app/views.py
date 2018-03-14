@@ -42,7 +42,7 @@ from .forms import DatadasarForm, LoginForm, VariabelForm
 from .models import (t_datadasar, t_kategori, t_kategoribreak,
                      t_kategoribreakSchema, t_user, t_userSchema,t_variabel, t_config)
 
-from config import APP_ROOT, PG_DB, PG_PASSWORD, PG_USER
+from config import APP_ROOT, PG_DB, PG_PASSWORD, PG_USER, config.PREFIX
 
 
 # engine open
@@ -68,7 +68,7 @@ def load_user(username):
 def randomstr_generator(size=6, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for x in range(size))
 
-@app.route('/login', methods=['GET','POST'])
+@app.route(config.PREFIX + '/login', methods=['GET','POST'])
 def login():
     form = LoginForm()
     if request.method == 'GET':
@@ -116,7 +116,7 @@ def login():
             flash('Form tidak tervalidasi')
             return redirect(url_for('login'))   
 
-@app.route("/logout")
+@app.route(config.PREFIX + "/logout")
 # @login_required
 def logout():
     session['logged_in'] = False
@@ -126,13 +126,13 @@ def logout():
     # logout_user()
     return redirect(url_for('index'))
 
-@app.route('/')
-@app.route('/index')
+@app.route(config.PREFIX + '/')
+@app.route(config.PREFIX + '/index')
 def index():
     # variabel = t_variabel.query.order_by(t_variabel.id.asc()).all()
     return render_template('dashboard/landing.htm', title=landing_judul.config_desc, landing_logo=landing_logo.config_desc, landing_judul=landing_judul.config_desc, desclanding=desclanding, landing_car1=landing_car1.config_desc,landing_car2=landing_car2.config_desc,landing_car3=landing_car3.config_desc)
 
-@app.route('/profiler')
+@app.route(config.PREFIX + '/profiler')
 def profiler():    
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -140,7 +140,7 @@ def profiler():
         variabel = t_variabel.query.order_by(t_variabel.id.asc()).all()
         return render_template('dashboard/profiler.htm', title=landing_judul.config_desc, landing_logo=landing_logo.config_desc, landing_judul=landing_judul.config_desc,variabel=variabel)
 
-@app.route('/profiler2')
+@app.route(config.PREFIX + '/profiler2')
 def profiler2():    
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -148,7 +148,7 @@ def profiler2():
         variabel = t_variabel.query.order_by(t_variabel.id.asc()).all()
         return render_template('dashboard/profiler2.htm', title=landing_judul.config_desc,landing_logo=landing_logo.config_desc, landing_judul=landing_judul.config_desc,variabel=variabel)
 
-@app.route('/landingedit', methods=['GET', 'POST'])
+@app.route(config.PREFIX + '/landingedit', methods=['GET', 'POST'])
 # @login_required
 def landingedit():
     if not session.get('logged_in'):
@@ -192,16 +192,16 @@ def landingedit():
             return redirect(url_for('index'))
         return render_template('dashboard/landingedit.htm', title=landing_judul.config_desc, landing_logo=landing_logo.config_desc,desclanding=desclanding, landing_judul=landing_judul)
 
-@app.route('/peta')
+@app.route(config.PREFIX + '/peta')
 def peta():
     return render_template('dashboard/peta.htm', landing_logo=landing_logo.config_desc, landing_judul=landing_judul.config_desc,title=landing_judul.config_desc,)
 
-@app.route('/profil_provinsi')
+@app.route(config.PREFIX + '/profil_provinsi')
 def profil_provinsi():
     variabel = t_variabel.query.order_by(t_variabel.id.asc()).all()
     return render_template('dashboard/profil_provinsi.htm', title=landing_judul.config_desc,landing_logo=landing_logo.config_desc, landing_judul=landing_judul.config_desc, variabel=variabel)
 
-@app.route('/variabel')
+@app.route(config.PREFIX + '/variabel')
 def variabel():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -225,7 +225,7 @@ def variabel():
         pagination = Pagination(page=page, total=rows, per_page=per_page, search=search, record_name='Variabel',css_framework='bootstrap3')
         return render_template('dashboard/variabel.htm',title=landing_judul.config_desc, landing_logo=landing_logo.config_desc, landing_judul=landing_judul.config_desc,variabel=variabel, per_page=per_page,  page=page, pagination=pagination)
 
-@app.route('/variabelbaru', methods=['GET', 'POST'])
+@app.route(config.PREFIX + '/variabelbaru', methods=['GET', 'POST'])
 def variabelbaru():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -246,7 +246,7 @@ def variabelbaru():
                 return redirect(url_for('variabel'))
         return render_template('dashboard/variabelbaru.htm', landing_logo=landing_logo.config_desc, landing_judul=landing_judul.config_desc,form=form,title=landing_judul.config_desc)
 
-@app.route('/variabel/delete/<n_variabel>', methods=['GET', 'POST'])
+@app.route(config.PREFIX + '/variabel/delete/<n_variabel>', methods=['GET', 'POST'])
 def variabeldelete(n_variabel):
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -271,7 +271,7 @@ def variabeldelete(n_variabel):
             return redirect(url_for('variabel'))
         return render_template('dashboard/variabeldelete.htm', landing_logo=landing_logo.config_desc, landing_judul=landing_judul.config_desc,variabel=variabel,title=landing_judul.config_desc)
 
-@app.route('/variabel/edit/<n_variabel>', methods=['GET', 'POST'])
+@app.route(config.PREFIX + '/variabel/edit/<n_variabel>', methods=['GET', 'POST'])
 def variabeledit(n_variabel):
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -287,21 +287,21 @@ def variabeledit(n_variabel):
         else:
             return render_template('dashboard/variabeledit.htm', landing_logo=landing_logo.config_desc, landing_judul=landing_judul.config_desc,variabel=variabel, form=form,title=landing_judul.config_desc)
 
-@app.route('/variabel/delete/')
+@app.route(config.PREFIX + '/variabel/delete/')
 def variabeldelete_dum():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
     else:
         return render_template('dashboard/variabeldelete.htm',landing_logo=landing_logo.config_desc, landing_judul=landing_judul.config_desc,title=landing_judul.config_desc)   
 
-@app.route('/variabel/edit/')
+@app.route(config.PREFIX + '/variabel/edit/')
 def variabeledit_dum():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
     else:
         return render_template('dashboard/variabeledit.htm',landing_logo=landing_logo.config_desc, landing_judul=landing_judul.config_desc,title=landing_judul.config_desc)   
 
-@app.route('/variabel/save/<id>', methods=['GET', 'POST'])
+@app.route(config.PREFIX + '/variabel/save/<id>', methods=['GET', 'POST'])
 def variabelsave():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -310,7 +310,7 @@ def variabelsave():
             pass
         return redirect(url_for(variabel) + '/' + str(id))
 
-@app.route('/variabel/<id>')
+@app.route(config.PREFIX + '/variabel/<id>')
 def variabeldetail(id):
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -318,7 +318,7 @@ def variabeldetail(id):
         variabel = t_variabel.query.filter_by(id=id).first()
         return render_template('dashboard/variabeldetail.htm', landing_logo=landing_logo.config_desc, landing_judul=landing_judul.config_desc,variabel=variabel,title=landing_judul.config_desc)
 
-@app.route('/variabel/detail/<id>', methods=['GET'])
+@app.route(config.PREFIX + '/variabel/detail/<id>', methods=['GET'])
 def variabeldetailload(id):
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -335,7 +335,7 @@ def variabeldetailload(id):
         # engine.dispose()
         return Response(jsonoutput, mimetype='application/json')
 
-@app.route('/datadasar')
+@app.route(config.PREFIX + '/datadasar')
 def datadasar():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -361,7 +361,7 @@ def datadasar():
         pagination = Pagination(page=page, total=rows, per_page=per_page, search=search, record_name='Data Dasar',css_framework='bootstrap3')
         return render_template('dashboard/datadasar.htm', landing_logo=landing_logo.config_desc, landing_judul=landing_judul.config_desc,title=landing_judul.config_desc, datadasar=datadasar, per_page=per_page,  page=page, pagination=pagination)
 
-@app.route('/datadasarget', methods=['GET'])
+@app.route(config.PREFIX +'/datadasarget', methods=['GET'])
 def datadasarget():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -376,7 +376,7 @@ def datadasarget():
         # engine.dispose()
         return Response(jsonoutput, mimetype='application/json')
 
-@app.route('/datadasardetail')
+@app.route(config.PREFIX +'/datadasardetail')
 def datadasardetail():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -410,7 +410,7 @@ def datadasardetail():
         pagination = Pagination(page=page, total=nresult, per_page=per_page, search=search, record_name='Data Dasar',css_framework='bootstrap3')
         return render_template('dashboard/datadasardetail.htm', landing_logo=landing_logo.config_desc, landing_judul=landing_judul.config_desc,tabel=tabel,result=result, result2=res2, per_page=per_page,  page=page, pagination=pagination,title=landing_judul.config_desc)
 
-@app.route('/datadasardesc', methods=['GET'])
+@app.route(config.PREFIX +'/datadasardesc', methods=['GET'])
 def datadasardesc():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -427,7 +427,7 @@ def datadasardesc():
         return Response(jsonoutput, mimetype='application/json')    
 
 
-@app.route('/datadasarvdesc', methods=['GET'])
+@app.route(config.PREFIX +'/datadasarvdesc', methods=['GET'])
 def datadasarvdesc():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -447,7 +447,7 @@ def datadasarvdesc():
         # engine.dispose()
         return Response(jsonoutput, mimetype='application/json')
 
-@app.route('/dasarmapcoloragg', methods=['GET'])
+@app.route(config.PREFIX +'/dasarmapcoloragg', methods=['GET'])
 def dasarmapcoloragg():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -471,7 +471,7 @@ def dasarmapcoloragg():
         jsonoutput = json.dumps(output)
         return Response(jsonoutput, mimetype='application/json')
 
-@app.route('/dasarmapcolor', methods=['GET'])
+@app.route(config.PREFIX +'/dasarmapcolor', methods=['GET'])
 def dasarmapcolor():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -496,7 +496,7 @@ def dasarmapcolor():
         jsonoutput = json.dumps(output)
         return Response(jsonoutput, mimetype='application/json')
 
-@app.route('/datadasarbaru', methods=['POST','GET'])
+@app.route(config.PREFIX +'/datadasarbaru', methods=['POST','GET'])
 def datadasarbaru():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -511,7 +511,7 @@ def datadasarbaru():
                 return redirect(url_for('datadasar'))
         return render_template('dashboard/datadasarbaru.htm', landing_logo=landing_logo.config_desc, landing_judul=landing_judul.config_desc,form=form,title=landing_judul.config_desc)
 
-@app.route('/datadasarhandler', methods=['POST'])
+@app.route(config.PREFIX +'/datadasarhandler', methods=['POST'])
 def datadasarhandler():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -545,7 +545,7 @@ def datadasarhandler():
             # engine.dispose()
             return Response("{success:true}", mimetype='application/json')
 
-@app.route('/datadasar/edit', methods=['POST','GET'])
+@app.route(config.PREFIX +'/datadasar/edit', methods=['POST','GET'])
 def datadasaredit():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -561,14 +561,14 @@ def datadasaredit():
             return redirect(url_for('datadasar'))
         return render_template('dashboard/datadasaredit.htm', landing_logo=landing_logo.config_desc, landing_judul=landing_judul.config_desc,form=form, datadasar=datadasar,title=landing_judul.config_desc)
 
-@app.route('/datadasar/delete', methods=['POST'])
+@app.route(config.PREFIX +'/datadasar/delete', methods=['POST'])
 def datadasardelete():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
     else:
         pass
 
-@app.route('/dddelete', methods=['GET','POST'])
+@app.route(config.PREFIX +'/dddelete', methods=['GET','POST'])
 def dddelete():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -587,7 +587,7 @@ def dddelete():
             datadasar = t_datadasar.query.filter_by(n_datadasar=n_datadasar).first()
             return render_template('dashboard/datadasardelete.htm', landing_logo=landing_logo.config_desc, landing_judul=landing_judul.config_desc, datadasar=datadasar,title=landing_judul.config_desc)
 
-@app.route('/daftar_desa')
+@app.route(config.PREFIX +'/daftar_desa')
 def daftar_desa():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -618,7 +618,7 @@ def daftar_desa():
         pagination = Pagination(page=page, total=rows, per_page=per_page, search=search, record_name='Desa',css_framework='bootstrap3')
         return render_template('dashboard/list_desa.htm', landing_logo=landing_logo.config_desc, landing_judul=landing_judul.config_desc,title=landing_judul.config_desc, desa=desa, per_page=per_page,  page=page, pagination=pagination)
 
-@app.route('/isivariabel')
+@app.route(config.PREFIX +'/isivariabel')
 def isivariabel():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -634,7 +634,7 @@ def isivariabel():
         # engine.dispose()
         return render_template('dashboard/isivariabel.htm', landing_logo=landing_logo.config_desc, landing_judul=landing_judul.config_desc,variabel=variabel, provinsi=l_provinsi, kabupaten=l_kabupaten, desa=l_desa,title=landing_judul.config_desc)
 
-@app.route('/simpanvariabel', methods=['POST'])
+@app.route(config.PREFIX +'/simpanvariabel', methods=['POST'])
 def simpanvariabel():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -687,7 +687,7 @@ def simpanvariabel():
             # return Response("{OK}", mimetype='application/json') 
             return redirect(url_for('variabel'))
 
-@app.route('/simpanvariabel2', methods=['POST'])
+@app.route(config.PREFIX +'/simpanvariabel2', methods=['POST'])
 def simpanvariabel2():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -769,7 +769,7 @@ def simpanvariabel2():
             # return Response("{OK}", mimetype='application/json') 
             return redirect(url_for('variabel'))
 
-@app.route('/simpanvariabel3', methods=['POST'])
+@app.route(config.PREFIX +'/simpanvariabel3', methods=['POST'])
 def simpanvariabel3():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -822,7 +822,7 @@ def simpanvariabel3():
             # return Response("{OK}", mimetype='application/json') 
             return redirect(url_for('variabel'))
 
-@app.route('/simpanvariabel4', methods=['POST'])
+@app.route(config.PREFIX +'/simpanvariabel4', methods=['POST'])
 def simpanvariabel4():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -928,7 +928,7 @@ def simpanvariabel4():
             # return Response("{OK}", mimetype='application/json') 
             return redirect(url_for('variabel'))
 
-@app.route('/simpanvariabel5', methods=['POST'])
+@app.route(config.PREFIX +'/simpanvariabel5', methods=['POST'])
 def simpanvariabel5():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -1028,7 +1028,7 @@ def simpanvariabel5():
             # return Response("{OK}", mimetype='application/json') 
             return redirect(url_for('variabel'))
 
-@app.route('/simpanbreak', methods=['POST'])
+@app.route(config.PREFIX +'/simpanbreak', methods=['POST'])
 def simpanbreak():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -1063,7 +1063,7 @@ def simpanbreak():
             return redirect(url_for('kategori'))
             # return Response("{OK}", mimetype='application/json') 
 
-@app.route('/simpanprofildaerah', methods=['POST'])
+@app.route(config.PREFIX +'/simpanprofildaerah', methods=['POST'])
 def simpanprofildaerah():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -1077,7 +1077,7 @@ def simpanprofildaerah():
             engine.execute(sa_text(sqlupdate).execution_options(autocommit=True))
             return Response("{OK}", mimetype='application/json') 
 
-@app.route('/profildaerah', methods=['GET'])
+@app.route(config.PREFIX +'/profildaerah', methods=['GET'])
 def profildaerah():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -1089,11 +1089,11 @@ def profildaerah():
         jsonoutput = json.dumps(output)
         return Response(jsonoutput, mimetype='application/json')
 
-# @app.route('/profiladmin',methods=['GET'])
+# @app.route(config.PREFIX +'/profiladmin',methods=['GET'])
 # def profiladmin():
 #     kode = request.args['kode']
 
-@app.route('/simpanindikator', methods=['POST'])
+@app.route(config.PREFIX +'/simpanindikator', methods=['POST'])
 def simpanindikator():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -1222,7 +1222,7 @@ def simpanindikator():
             return redirect(url_for('isivariabel'))
             # return Response(sqlinsert, mimetype='application/json') 
 
-@app.route('/htmlprofile', methods=['GET'])
+@app.route(config.PREFIX +'/htmlprofile', methods=['GET'])
 def htmlprofile():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -1250,7 +1250,7 @@ def htmlprofile():
         # engine.dispose()
         return Response(jsonoutput, mimetype='application/json')
 
-@app.route('/grafmodel', methods=['GET'])
+@app.route(config.PREFIX +'/grafmodel', methods=['GET'])
 def grafmodel():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -1274,7 +1274,7 @@ def grafmodel():
         jsonoutput = json.dumps(output)
         return Response(jsonoutput, mimetype='application/json')
 
-@app.route('/grafmodel1c3', methods=['GET'])
+@app.route(config.PREFIX +'/grafmodel1c3', methods=['GET'])
 def grafmodel1c3():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -1294,7 +1294,7 @@ def grafmodel1c3():
         jsonoutput = json.dumps(output)
         return Response(jsonoutput, mimetype='application/json')
 
-@app.route('/grafmodel1c3agg', methods=['GET'])
+@app.route(config.PREFIX +'/grafmodel1c3agg', methods=['GET'])
 def grafmodel1c3agg():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -1315,7 +1315,7 @@ def grafmodel1c3agg():
         jsonoutput = json.dumps(output)
         return Response(jsonoutput, mimetype='application/json')
 
-@app.route('/mapcolor', methods=['GET'])
+@app.route(config.PREFIX +'/mapcolor', methods=['GET'])
 def mapcolor():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -1347,7 +1347,7 @@ def mapcolor():
         jsonoutput = json.dumps(output)
         return Response(jsonoutput, mimetype='application/json')
 
-@app.route('/mapcoloragg', methods=['GET'])
+@app.route(config.PREFIX +'/mapcoloragg', methods=['GET'])
 def mapcoloragg():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -1376,7 +1376,7 @@ def mapcoloragg():
         jsonoutput = json.dumps(output)
         return Response(jsonoutput, mimetype='application/json')
 
-@app.route('/kategori')
+@app.route(config.PREFIX +'/kategori')
 def kategori():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -1386,7 +1386,7 @@ def kategori():
         kategoribreak = t_kategoribreak.query.order_by(t_kategoribreak.id.asc()).all()
         return render_template('dashboard/kategori.htm', landing_judul=landing_judul.config_desc,landing_logo=landing_logo.config_desc, variabel=variabel, kategori=kategori,title=landing_judul.config_desc)
 
-@app.route('/kategoridesc')
+@app.route(config.PREFIX +'/kategoridesc')
 def kategoridesc():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -1398,7 +1398,7 @@ def kategoridesc():
         jsonoutput = json.dumps(output)
         return Response(jsonoutput, mimetype='application/json')
 
-@app.route('/simpantemplateisian', methods=['POST'])
+@app.route(config.PREFIX +'/simpantemplateisian', methods=['POST'])
 def simpantemplateisian():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -1422,7 +1422,7 @@ def simpantemplateisian():
             # engine.dispose()
             return Response("{filename:%s}" % (fl), mimetype='application/json') 
 
-@app.route('/getdesainkab', methods=['GET'])
+@app.route(config.PREFIX +'/getdesainkab', methods=['GET'])
 def getdesainkab():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -1441,7 +1441,7 @@ def getdesainkab():
         # engine.dispose()
         return Response(jsonoutput, mimetype='application/json')
 
-@app.route('/getjawaban', methods=['GET'])
+@app.route(config.PREFIX +'/getjawaban', methods=['GET'])
 def getjawaban():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -1476,7 +1476,7 @@ def getjawaban():
         # engine.dispose()
         return Response(jsonoutput, mimetype='application/json')
 
-@app.route('/profileagg', methods=['GET'])
+@app.route(config.PREFIX +'/profileagg', methods=['GET'])
 def profileagg():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -1502,7 +1502,7 @@ def profileagg():
         # engine.dispose()
         return Response(jsonoutput, mimetype='application/json')
 
-@app.route('/penduduk', methods=['GET'])
+@app.route(config.PREFIX +'/penduduk', methods=['GET'])
 def penduduk():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -1552,7 +1552,7 @@ def penduduk():
         # engine.dispose()
         return Response(jsonoutput, mimetype='application/json')
 
-@app.route('/pendidikan', methods=['GET'])
+@app.route(config.PREFIX +'/pendidikan', methods=['GET'])
 def pendidikan():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -1570,7 +1570,7 @@ def pendidikan():
         # engine.dispose()
         return Response(jsonoutput, mimetype='application/json')
 
-@app.route('/radar', methods=['GET'])
+@app.route(config.PREFIX +'/radar', methods=['GET'])
 def radar():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -1616,7 +1616,7 @@ def radar():
         # engine.dispose()
         return Response(jsonoutput, mimetype='application/json')
 
-@app.route('/pesisir', methods=['GET'])
+@app.route(config.PREFIX +'/pesisir', methods=['GET'])
 def pesisir():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -1638,7 +1638,7 @@ def pesisir():
         # engine.dispose()
         return Response(jsonoutput, mimetype='application/json')
 
-@app.route('/prodes', methods=['GET'])
+@app.route(config.PREFIX +'/prodes', methods=['GET'])
 def prodes():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -1663,7 +1663,7 @@ def prodes():
         # engine.dispose()
         return Response(jsonoutput, mimetype='application/json')
 
-@app.route('/prokab', methods=['GET'])
+@app.route(config.PREFIX +'/prokab', methods=['GET'])
 def prokab():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -1683,7 +1683,7 @@ def prokab():
         jsonoutput = json.dumps(output)
         return Response(jsonoutput, mimetype='application/json')
 
-@app.route('/fdesa', methods=['GET'])
+@app.route(config.PREFIX +'/fdesa', methods=['GET'])
 def fdesa():
     rows = t_user.query.order_by(t_user.username).all()
     output = []
@@ -1697,7 +1697,7 @@ def fdesa():
     jsonoutput = json.dumps(output)
     return Response(jsonoutput, mimetype='application/json')
 
-@app.route('/eksportmpl', methods=['GET'])
+@app.route(config.PREFIX +'/eksportmpl', methods=['GET'])
 def eksportmpl():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -1803,7 +1803,7 @@ def eksportmpl():
             wb.save(APP_ROOT + 'app/static/data/tmp/'+ rndfile +'.xlsx')
             return send_from_directory(directory=APP_ROOT + 'app/static/data/tmp/', filename=rndfile +'.xlsx')
 
-@app.route('/impordata', methods=['POST'])
+@app.route(config.PREFIX +'/impordata', methods=['POST'])
 def impordata():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -1907,7 +1907,7 @@ def impordata():
                     print(kolval)
             return Response('{"success": true}', mimetype='application/json') 
 
-@app.route('/eksportmpldasar', methods=['GET'])
+@app.route(config.PREFIX +'/eksportmpldasar', methods=['GET'])
 def eksportmpldasar():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -1978,7 +1978,7 @@ def impordatacalc(tipe,tabel,kolom,isian,skor,kode,tahun):
     engine.execute(sqlterkategori)
     # engine.dispose()
 
-@app.route('/isiintervensi')
+@app.route(config.PREFIX +'/isiintervensi')
 def isiintervensi():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -1994,7 +1994,7 @@ def isiintervensi():
         # engine.dispose()
         return render_template('dashboard/isiintervensi.htm', landing_logo=landing_logo.config_desc, landing_judul=landing_judul.config_desc,variabel=variabel, provinsi=l_provinsi, kabupaten=l_kabupaten, desa=l_desa,title=landing_judul.config_desc)
 
-@app.route('/simpanintervensi', methods=['POST'])
+@app.route(config.PREFIX +'/simpanintervensi', methods=['POST'])
 def simpanintervensi():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -2016,7 +2016,7 @@ def simpanintervensi():
             engine.execute(sa_text(sqlinsert))
     return Response("{OK}", mimetype='application/json') 
 
-@app.route('/intervensi', methods=['GET'])
+@app.route(config.PREFIX +'/intervensi', methods=['GET'])
 def intervensi():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -2044,7 +2044,7 @@ def intervensi():
         # engine.dispose()
         return Response(jsonoutput, mimetype='application/json')
 
-@app.route('/resetpassword', methods=['GET','POST'])
+@app.route(config.PREFIX +'/resetpassword', methods=['GET','POST'])
 def resetpassword():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -2076,7 +2076,7 @@ def resetpassword():
             pagination = Pagination(page=page, total=rows, per_page=per_page, search=search, record_name='Desa',css_framework='bootstrap3')
             return render_template('dashboard/resetpassword.htm', landing_logo=landing_logo.config_desc, landing_judul=landing_judul.config_desc,title=landing_judul.config_desc, desa=desa, per_page=per_page,  page=page, pagination=pagination, form=form,username=username)
 
-@app.route('/caridaerah', methods=['GET'])
+@app.route(config.PREFIX +'/caridaerah', methods=['GET'])
 def caridaerah():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -2107,7 +2107,7 @@ def caridaerah():
             print(item)
         return Response(jsonoutput, mimetype='application/json') 
 
-@app.route('/eksportmplds', methods=['GET'])
+@app.route(config.PREFIX +'/eksportmplds', methods=['GET'])
 def eksportmplds():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -2143,7 +2143,7 @@ def eksportmplds():
             wb.save(APP_ROOT + 'app/static/data/tmp/'+ rndfile +'.xlsx')
             return send_from_directory(directory=APP_ROOT + 'app/static/data/tmp/', filename=rndfile +'.xlsx')
 
-@app.route('/impordatads', methods=['POST'])
+@app.route(config.PREFIX +'/impordatads', methods=['POST'])
 def impordatads():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -2203,7 +2203,7 @@ def impordatads():
                     # print(sqlinsert)
             return Response('{"success": true}', mimetype='application/json') 
 
-@app.route('/isidatadasar')
+@app.route(config.PREFIX +'/isidatadasar')
 def isidatadasar():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -2226,7 +2226,7 @@ def isidatadasar():
         # engine.dispose()
         return render_template('dashboard/isidatadasar.htm', landing_logo=landing_logo.config_desc, landing_judul=landing_judul.config_desc,tabel=tabel,variabel=variabel, provinsi=l_provinsi, kabupaten=l_kabupaten, desa=l_desa, datadesc=datadesc,title=landing_judul.config_desc)
 
-@app.route('/simpandatadasar', methods=['POST'])
+@app.route(config.PREFIX +'/simpandatadasar', methods=['POST'])
 def simpandatadasar():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -2258,7 +2258,7 @@ def simpandatadasar():
         # return Response('{"success": true}', mimetype='application/json') 
         return redirect(url_for('variabel'))
 
-@app.route('/initsetup', methods=['GET','POST'])
+@app.route(config.PREFIX +'/initsetup', methods=['GET','POST'])
 def initsetup():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -2349,7 +2349,7 @@ def initsetup():
                 return redirect(url_for('initsetup')) 
     return render_template('dashboard/initsetup.htm', landing_logo=landing_logo.config_desc, landing_judul=landing_judul.config_desc, title=landing_judul.config_desc)
 
-@app.route('/isipertanian', methods=['POST','GET'])
+@app.route(config.PREFIX +'/isipertanian', methods=['POST','GET'])
 def isipertanian():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -2375,7 +2375,7 @@ def isipertanian():
             # engine.dispose()
             return render_template('dashboard/isipertanian.htm', landing_logo=landing_logo.config_desc, landing_judul=landing_judul.config_desc,tabel=tabel,variabel=variabel, provinsi=l_provinsi, kabupaten=l_kabupaten, desa=l_desa, datadesc=datadesc,title=landing_judul.config_desc)
 
-@app.route('/simpanpertanian', methods=['POST'])
+@app.route(config.PREFIX +'/simpanpertanian', methods=['POST'])
 def simpanpertanian():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -2408,7 +2408,7 @@ def simpanpertanian():
             engine.execute(sa_text(sqlinsert).execution_options(autocommit=True))
             return Response('{"success": true}', mimetype='application/json') 
 
-@app.route('/rekap_padi')
+@app.route(config.PREFIX +'/rekap_padi')
 def rekap_padi():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -2445,7 +2445,7 @@ def rekap_padi():
         pagination = Pagination(page=page, total=rows, per_page=per_page, search=search, record_name='Desa',css_framework='bootstrap3')
         return render_template('dashboard/rekap_padi.htm', landing_logo=landing_logo.config_desc, landing_judul=landing_judul.config_desc,title=landing_judul.config_desc, desa=desa, per_page=per_page,  page=page, pagination=pagination)
 
-@app.route('/isian_mobile')
+@app.route(config.PREFIX +'/isian_mobile')
 def isian_mobile():
     if not session.get('logged_in'):
         return redirect(url_for('login_mobile'))
@@ -2461,7 +2461,7 @@ def isian_mobile():
         # engine.dispose()
         return render_template('dashboard/isivariabel_mobile.htm', landing_logo=landing_logo.config_desc, landing_judul=landing_judul.config_desc,variabel=variabel, provinsi=l_provinsi, kabupaten=l_kabupaten, desa=l_desa,title=landing_judul.config_desc)
 
-@app.route('/login_mobile', methods=['POST','GET'])
+@app.route(config.PREFIX +'/login_mobile', methods=['POST','GET'])
 def login_mobile():
     form = LoginForm()
     if request.method == 'GET':
@@ -2509,7 +2509,7 @@ def login_mobile():
             flash('Form tidak tervalidasi')
             return redirect(url_for('login_mobile'))  
 
-@app.route("/logout_mobile")
+@app.route(config.PREFIX +"/logout_mobile")
 # @login_required
 def logout_mobile():
     session['logged_in'] = False
@@ -2519,7 +2519,7 @@ def logout_mobile():
     # logout_user()
     return redirect(url_for('login_mobile'))
 
-# @app.route('/proxy', methods=['POST','GET'])
+# @app.route(config.PREFIX +'/proxy', methods=['POST','GET'])
 # def crossdom():
 #     reply = proxypy.get(request.query_string)
 #     # print request.query_string
